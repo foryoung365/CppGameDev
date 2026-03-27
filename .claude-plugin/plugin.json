@@ -1,0 +1,8 @@
+{
+  "name": "cpp-mmorpg-gameplay",
+  "description": "Claude Code workflow toolkit for C++ MMORPG gameplay server development with SVN-first delivery.",
+  "version": "1.0.0",
+  "author": {
+    "name": "CppGameDev Toolkit"
+  }
+}
