@@ -32,6 +32,8 @@ Or, if you want Claude Code to fetch the marketplace from GitHub:
 - `/cpp-mmorpg-gameplay:gp-debug`
 - `/cpp-mmorpg-gameplay:gp-review`
 - `/cpp-mmorpg-gameplay:svn-handoff`
+- `/cpp-mmorpg-gameplay:gp-compound`
+- `/cpp-mmorpg-gameplay:gp-compound-refresh`
 
 ## When To Use Each One
 
@@ -39,6 +41,8 @@ Or, if you want Claude Code to fetch the marketplace from GitHub:
 - `gp-debug`: diagnose a gameplay symptom when the root cause is still unknown
 - `gp-review`: run project-aware C++ review plus gameplay-risk review
 - `svn-handoff`: prepare a feature-sized SVN delivery handoff with validation evidence
+- `gp-compound`: write a verified gameplay experience document into the host project
+- `gp-compound-refresh`: maintain verified gameplay experience documents in the host project
 
 ## Human Reading Order
 
@@ -50,6 +54,19 @@ If you want the human-readable policy mirrors, read:
 
 Runtime authority still lives in plugin assets such as `skills/`, `agents/`, and `commands/`, not in docs alone.
 
+## Host-Project Experience Library
+
+This plugin can retrieve and write verified gameplay experience docs, but the library lives in the **host project**, not in this plugin repository.
+
+Default host-project locations:
+
+- `docs/cpp-mmorpg-gameplay/solutions/bugs/`
+- `docs/cpp-mmorpg-gameplay/solutions/patterns/`
+
+If the active host project's `claude.md` defines a different experience root, that override wins.
+
+Historical experience is secondary context only. Current code, current evidence, and current validation remain authoritative.
+
 ## Offline Packaging
 
 To create a local offline release zip, run from the repository root:
@@ -59,6 +76,7 @@ scripts\package-plugin.bat
 ```
 
 The package is written to `dist\cpp-mmorpg-gameplay-<version>.zip`.
+It contains plugin runtime assets only, not host-project experience docs, test fixtures, or internal maintainer docs.
 
 ## Build Integration Boundary
 

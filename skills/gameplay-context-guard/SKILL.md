@@ -18,6 +18,14 @@ Before any gameplay edit or plan, output a context card with exactly these 8 fie
 
 Keep each field concrete and tied to the current request. If a field is still unknown, say so directly instead of guessing. Pass the completed card to `task-intake-router`.
 
+Prefer stable domain words that can help later experience retrieval:
+
+- subdomain names
+- component names
+- module or class names
+- config names
+- event-chain verbs
+
 ## What The Guard Must Surface
 
 When filling the card, explicitly look for:

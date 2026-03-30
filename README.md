@@ -39,6 +39,8 @@ Use the plugin namespace:
 - `/cpp-mmorpg-gameplay:gp-debug`
 - `/cpp-mmorpg-gameplay:gp-review`
 - `/cpp-mmorpg-gameplay:svn-handoff`
+- `/cpp-mmorpg-gameplay:gp-compound`
+- `/cpp-mmorpg-gameplay:gp-compound-refresh`
 
 ## Marketplace
 
@@ -80,6 +82,8 @@ Create an offline release package:
 scripts\package-plugin.bat
 ```
 
+The package includes runtime plugin assets only. It does not include host-project experience docs, test fixtures, or internal maintainer docs.
+
 ## Publication Boundary
 
 Published with the plugin:
@@ -105,4 +109,9 @@ Internal maintainer docs:
 - SVN commits are allowed only at one complete feature or one complete fix granularity.
 - A fresh successful compile is required before any commit-ready conclusion, and compile success does not replace targeted validation.
 - The plugin does not define project-specific build commands; compile proof should use the host project's standard build script or build command from that project's `claude.md` or equivalent local runtime config.
+- The plugin supports host-project experience retrieval and experience authoring.
+- Experience lives in the host project, not in this plugin repository.
+- The default host-project experience paths are `docs/cpp-mmorpg-gameplay/solutions/bugs/` and `docs/cpp-mmorpg-gameplay/solutions/patterns/`.
+- The active host project's `claude.md` can override the experience root explicitly.
+- Historical experience is secondary context only; current code, current evidence, and current validation stay authoritative.
 - Published docs are human-facing only; runtime authority stays in plugin assets.

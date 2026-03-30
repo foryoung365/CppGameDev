@@ -27,7 +27,10 @@ When a request is ready for SVN delivery, the handoff should include:
 - the feature or fix boundary
 - the validation evidence
 - the fresh successful compile result
+- any relevant prior learnings from the host project
 - any remaining risk or follow-up
+
+Historical experience can inform the handoff, but it does not override current compile or validation evidence.
 
 ## Operator Note
 

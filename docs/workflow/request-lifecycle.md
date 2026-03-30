@@ -13,6 +13,7 @@ The flow works like this:
 1. `gameplay-context-guard` forces the request into a gameplay context card before any edit or plan is drafted.
 2. `task-intake-router` uses the context card to classify the request by root-cause clarity, scope, and risk, then emits the `pre-plan` output.
 3. `pre-plan` is the router's output stage with fixed fields: `goal`, `impact`, `unknowns`, `validation`, and `selected plan name`.
+4. `gp-experience-check` can add an `Experience summary` after `pre-plan` using the host project's verified experience library.
 
 ## Plan Shapes
 
@@ -42,3 +43,4 @@ Use when the root cause is not yet known. The goal is diagnosis first: reproduct
 ## Operator Note
 
 This document is for human operators. If a runtime rule and a doc summary ever diverge, fix the plugin runtime assets first and then update this mirror.
+Historical experience is secondary context only; current code, current evidence, and current validation remain the primary truth.

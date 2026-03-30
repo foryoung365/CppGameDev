@@ -7,6 +7,8 @@ This file records which upstream ideas influenced this plugin and which project-
 | `skills/cpp-coding-standards/SKILL.md` | project skill + ECC cpp-coding-standards | merged, project-first | Full merged project standard; project naming, formatting, explicit-memory, and legacy buffer conventions win; accepted ECC items are limited exceptions: `nullptr`, `using`, `virtual`/`override`/`final`, and Rule of Zero/Five |
 | `agents/cpp-reviewer.md` | merged C++ standard | aligned reviewer | Project-aware C++ reviewer that preserves local naming, formatting, and ownership culture while still blocking real defects |
 | `agents/gameplay-main.md` | local toolkit governance | runtime authority | Main runtime entry point replacing root governance files |
+| `skills/gp-compound/SKILL.md` | CE compound concept | adapted, host-project-first | Keeps the compound idea but writes to host-project docs instead of the plugin repository and rejects speculative learnings |
+| `agents/gameplay-learnings-researcher.md` | CE learnings retrieval concept | adapted, evidence-first | Retrieves verified host-project learnings as secondary context only |
 | `docs/operator/quickstart.md` | local operator docs | published human doc | Human quickstart for loading the plugin and using namespaced commands |
 
 ## Resolution Rule
@@ -16,6 +18,9 @@ This file records which upstream ideas influenced this plugin and which project-
 - Preserve the project's Hungarian naming and brace/tab formatting.
 - Accept only the documented ECC exceptions for `nullptr`, `using`, virtual-function keywords, and Rule of Zero/Five; this does not mean the toolkit adopts the full modern ECC default style.
 - Reject ECC defaults that require `clang-format` as the style authority or that reject the project's naming culture.
+- The gameplay experience loop is inspired by CE's compound and retrieval model, but the plugin diverges on storage and trust boundaries.
+- Host-project experience docs live outside the plugin repository.
+- Speculative learnings, inferred replacements, and unverified observations are rejected rather than preserved.
 
 ## Documentation Boundary
 

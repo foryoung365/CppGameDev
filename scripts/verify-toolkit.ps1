@@ -103,7 +103,19 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 		'skills',
 		'agents',
 		'commands',
-		'docs\operator\quickstart.md'
+		'docs\operator\quickstart.md',
+		'skills\gp-compound\SKILL.md',
+		'skills\gp-compound\assets\bug-track-template.md',
+		'skills\gp-compound\assets\knowledge-track-template.md',
+		'skills\gp-compound\references\experience-schema.md',
+		'skills\gp-compound-refresh\SKILL.md',
+		'skills\gp-compound-refresh\references\refresh-rules.md',
+		'skills\gp-experience-check\SKILL.md',
+		'agents\gameplay-learnings-researcher.md',
+		'commands\gp-compound.md',
+		'commands\gp-compound-refresh.md',
+		'tests\fixtures\experience\host-project\docs\cpp-mmorpg-gameplay\solutions\bugs\combat\buff-remove-ordering-2026-03-30.md',
+		'tests\fixtures\experience\host-project\docs\cpp-mmorpg-gameplay\solutions\patterns\workflow\evidence-before-compound-2026-03-30.md'
 	)
 
 	$missing = @()
@@ -145,6 +157,8 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 	$pluginEntry = @($marketplace.plugins | Where-Object name -eq 'cpp-mmorpg-gameplay')
 	Assert-Condition ($pluginEntry.Count -eq 1) 'marketplace.json must include exactly one cpp-mmorpg-gameplay entry'
 	Assert-Condition ($pluginEntry[0].source -eq './') 'marketplace plugin entry must use relative source ./'
+	Assert-Condition ($marketplace.metadata.version -eq $plugin.version) 'marketplace metadata version must match plugin.json version'
+	Assert-Condition ($pluginEntry[0].version -eq $plugin.version) 'marketplace plugin entry version must match plugin.json version'
 
 	$settings = Get-Content -Raw -LiteralPath (Join-Path $repoRoot 'settings.json') | ConvertFrom-Json
 	Assert-Condition (-not [string]::IsNullOrWhiteSpace($settings.agent)) 'settings.json must define agent'
@@ -203,7 +217,8 @@ Invoke-ToolkitCheck 'toolkit remains self-contained without vendored upstream re
 		'references',
 		'references/superpowers',
 		'references/ecc-cpp',
-		'cpp-coding-standards-skill'
+		'cpp-coding-standards-skill',
+		'docs\solutions'
 	)
 
 	$hits = @()
@@ -388,23 +403,90 @@ Invoke-ToolkitCheck 'published docs are marked human-facing and not sole runtime
 	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
 }
 
+Invoke-ToolkitCheck 'experience runtime contract stays host-project scoped and evidence-second' {
+	$checks = @(
+		@{
+			Path = 'agents/gameplay-main.md'
+			Needles = @(
+				'Historical experience is secondary context only.',
+				'Current code, current logs, current reproduction evidence, and current validation outrank historical experience.',
+				'docs/cpp-mmorpg-gameplay/solutions/bugs/',
+				'docs/cpp-mmorpg-gameplay/solutions/patterns/'
+			)
+		},
+		@{
+			Path = 'skills/gp-experience-check/SKILL.md'
+			Needles = @(
+				'Historical experience never outranks:',
+				'Search the host project''s experience library, not the plugin repository.',
+				'docs/cpp-mmorpg-gameplay/solutions/bugs/',
+				'docs/cpp-mmorpg-gameplay/solutions/patterns/'
+			)
+		},
+		@{
+			Path = 'skills/gp-compound/SKILL.md'
+			Needles = @(
+				'Write experience documents into the **host project**, not into this plugin repository.',
+				'Do not create or update any experience document unless **all three** are true:',
+				'the evidence is explicit',
+				'the conclusion is explicit',
+				'the validation is explicit'
+			)
+		},
+		@{
+			Path = 'skills/evidence-first-change-validation/SKILL.md'
+			Needles = @(
+				'Historical experience can inform validation choices, but current validated evidence outranks historical experience every time.'
+			)
+		},
+		@{
+			Path = 'README.md'
+			Needles = @(
+				'The plugin supports host-project experience retrieval and experience authoring.',
+				'Experience lives in the host project, not in this plugin repository.',
+				'Historical experience is secondary context only; current code, current evidence, and current validation stay authoritative.'
+			)
+		}
+	)
+
+	$missing = @()
+	foreach ($check in $checks) {
+		$text = Get-FileText -Path (Join-Path $repoRoot $check.Path)
+		foreach ($needle in $check.Needles) {
+			if ($text -notmatch [regex]::Escape($needle)) {
+				$missing += "$($check.Path) missing $needle"
+			}
+		}
+	}
+
+	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
+}
+
 Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 	$commandChecks = @(
 		@{
 			Path = 'commands/intake.md'
-			Needles = @('gameplay-context-guard', 'task-intake-router', 'pre-plan')
+			Needles = @('gameplay-context-guard', 'task-intake-router', 'pre-plan', 'gp-experience-check', 'Experience summary')
 		},
 		@{
 			Path = 'commands/gp-debug.md'
-			Needles = @('gameplay-context-guard', 'task-intake-router', 'debugging-plan', 'systematic-debugging')
+			Needles = @('gameplay-context-guard', 'task-intake-router', 'debugging-plan', 'systematic-debugging', 'gp-experience-check', 'candidate leads, not proof')
 		},
 		@{
 			Path = 'commands/gp-review.md'
-			Needles = @('cpp-reviewer', 'gameplay-reviewer')
+			Needles = @('cpp-reviewer', 'gameplay-reviewer', 'gp-experience-check', 'Relevant prior learnings')
 		},
 		@{
 			Path = 'commands/svn-handoff.md'
-			Needles = @('svn-workspace-discipline', 'svn-delivery-handoff', 'fresh successful compile')
+			Needles = @('svn-workspace-discipline', 'svn-delivery-handoff', 'fresh successful compile', 'gp-experience-check', 'merits `gp-compound`')
+		},
+		@{
+			Path = 'commands/gp-compound.md'
+			Needles = @('gp-compound', 'host project', 'evidence', 'conclusion', 'validation')
+		},
+		@{
+			Path = 'commands/gp-compound-refresh.md'
+			Needles = @('gp-compound-refresh', 'host project', 'keep', 'update', 'consolidate', 'delete')
 		}
 	)
 
@@ -415,6 +497,26 @@ Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 			if ($text -notmatch [regex]::Escape($needle)) {
 				$missing += "$($commandCheck.Path) missing $needle"
 			}
+		}
+	}
+
+	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
+}
+
+Invoke-ToolkitCheck 'experience fixtures stay in host-project-shaped test paths only' {
+	$rootExperiencePath = Join-Path $repoRoot 'docs\cpp-mmorpg-gameplay'
+	Assert-Condition (-not (Test-Path -LiteralPath $rootExperiencePath)) 'Plugin root must not contain runtime host-project experience docs'
+
+	$fixtureFiles = @(
+		'tests/fixtures/experience/host-project/docs/cpp-mmorpg-gameplay/solutions/bugs/combat/buff-remove-ordering-2026-03-30.md',
+		'tests/fixtures/experience/host-project/docs/cpp-mmorpg-gameplay/solutions/patterns/workflow/evidence-before-compound-2026-03-30.md'
+	)
+
+	$missing = @()
+	foreach ($relativePath in $fixtureFiles) {
+		$text = Get-FileText -Path (Join-Path $repoRoot $relativePath)
+		if ($text -notmatch '(?m)^---\s*$') {
+			$missing += "$relativePath missing frontmatter"
 		}
 	}
 

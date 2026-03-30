@@ -12,6 +12,8 @@ Not every task needs a test-first workflow, but every change needs a defined pro
 
 Define the evidence before the change, then collect the same evidence after the change.
 
+Historical experience can inform validation choices, but current validated evidence outranks historical experience every time.
+
 ## Evidence Types
 
 Use whichever proof is best for the change:
@@ -46,3 +48,4 @@ Targeted validation still matters after compile success.
 - Do not rely on memory or stale runs.
 - Prefer concrete checks that another person could repeat.
 - Use targeted tests when behavior, regression risk, ownership, or lifecycle edges need stronger proof than logs or compile output alone.
+- If a prior learning conflicts with current verified evidence, keep the conflict visible and trust the current verified evidence.
