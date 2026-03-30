@@ -56,7 +56,7 @@ Offline local marketplace add:
 GitHub marketplace add:
 
 ```text
-/plugin marketplace add foryoung365/CppGameDev
+/plugin marketplace add foryoung365/CppGameDev-skill
 /plugin install cpp-mmorpg-gameplay@foryoung365-plugins
 ```
 

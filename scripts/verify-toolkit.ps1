@@ -654,7 +654,7 @@ Invoke-ToolkitCheck 'cpp review fixtures cover approved and rejected markers' {
 Invoke-ToolkitCheck 'claude CLI smoke precheck is documented or manually pending' {
 	$readmeText = Get-FileText -Path (Join-Path $repoRoot 'README.md')
 	Assert-Condition ($readmeText -match [regex]::Escape('claude --plugin-dir I:\CppGameDev')) 'README.md missing plugin smoke-test command'
-	Assert-Condition ($readmeText -match [regex]::Escape('/plugin marketplace add foryoung365/CppGameDev')) 'README.md missing marketplace add command'
+Assert-Condition ($readmeText -match [regex]::Escape('/plugin marketplace add foryoung365/CppGameDev-skill')) 'README.md missing marketplace add command'
 	Assert-Condition ($readmeText -match [regex]::Escape('/plugin install cpp-mmorpg-gameplay@foryoung365-plugins')) 'README.md missing marketplace install command'
 
 	$claude = Get-Command claude -ErrorAction SilentlyContinue

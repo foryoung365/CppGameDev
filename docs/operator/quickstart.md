@@ -22,7 +22,7 @@ If you want to consume it through the marketplace flow instead of `--plugin-dir`
 Or, if you want Claude Code to fetch the marketplace from GitHub:
 
 ```text
-/plugin marketplace add foryoung365/CppGameDev
+/plugin marketplace add foryoung365/CppGameDev-skill
 /plugin install cpp-mmorpg-gameplay@foryoung365-plugins
 ```
 
