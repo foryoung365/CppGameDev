@@ -1,8 +1,18 @@
 {
   "name": "cpp-mmorpg-gameplay",
   "description": "Claude Code workflow toolkit for C++ MMORPG gameplay server development with SVN-first delivery.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": {
-    "name": "CppGameDev Toolkit"
-  }
+    "name": "foryoung365",
+    "url": "https://github.com/foryoung365"
+  },
+  "homepage": "https://github.com/foryoung365/CppGameDev",
+  "repository": "https://github.com/foryoung365/CppGameDev",
+  "keywords": [
+    "claude-code",
+    "cpp",
+    "mmorpg",
+    "gameplay",
+    "svn"
+  ]
 }

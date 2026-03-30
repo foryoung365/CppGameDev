@@ -1,0 +1,40 @@
+{
+  "name": "foryoung365-plugins",
+  "owner": {
+    "name": "foryoung365"
+  },
+  "metadata": {
+    "description": "Claude Code plugins for C++ MMORPG gameplay server development and related workflows.",
+    "version": "1.0.1"
+  },
+  "plugins": [
+    {
+      "name": "cpp-mmorpg-gameplay",
+      "source": {
+        "source": "github",
+        "repo": "foryoung365/CppGameDev",
+        "ref": "main"
+      },
+      "description": "Claude Code workflow toolkit for C++ MMORPG gameplay server development with SVN-first delivery.",
+      "version": "1.0.1",
+      "author": {
+        "name": "foryoung365"
+      },
+      "homepage": "https://github.com/foryoung365/CppGameDev",
+      "repository": "https://github.com/foryoung365/CppGameDev",
+      "keywords": [
+        "claude-code",
+        "cpp",
+        "mmorpg",
+        "gameplay",
+        "svn"
+      ],
+      "category": "game-development",
+      "tags": [
+        "game-server",
+        "workflow",
+        "team-tooling"
+      ]
+    }
+  ]
+}

@@ -40,6 +40,22 @@ Use the plugin namespace:
 - `/cpp-mmorpg-gameplay:gp-review`
 - `/cpp-mmorpg-gameplay:svn-handoff`
 
+## Marketplace
+
+This repository now ships both the plugin manifest and a marketplace catalog.
+
+Marketplace add:
+
+```text
+/plugin marketplace add foryoung365/CppGameDev
+```
+
+Plugin install:
+
+```text
+/plugin install cpp-mmorpg-gameplay@foryoung365-plugins
+```
+
 ## Validation
 
 Run the structural verification script:
@@ -59,6 +75,7 @@ claude --plugin-dir I:\CppGameDev
 Published with the plugin:
 
 - runtime assets in `skills/`, `agents/`, `commands/`, `settings.json`, and `.claude-plugin/plugin.json`
+- marketplace catalog in `.claude-plugin/marketplace.json`
 - `README.md`
 - `docs/operator/quickstart.md`
 

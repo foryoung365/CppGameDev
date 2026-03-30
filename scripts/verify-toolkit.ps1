@@ -97,6 +97,7 @@ function Test-SkillFrontMatter {
 Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 	$requiredPaths = @(
 		'.claude-plugin\plugin.json',
+		'.claude-plugin\marketplace.json',
 		'settings.json',
 		'skills',
 		'agents',
@@ -134,6 +135,16 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 	Assert-Condition ($plugin.name -eq 'cpp-mmorpg-gameplay') 'plugin.json name must be cpp-mmorpg-gameplay'
 	Assert-Condition (-not [string]::IsNullOrWhiteSpace($plugin.description)) 'plugin.json description is required'
 	Assert-Condition (-not [string]::IsNullOrWhiteSpace($plugin.version)) 'plugin.json version is required'
+	Assert-Condition (-not [string]::IsNullOrWhiteSpace($plugin.homepage)) 'plugin.json homepage is required'
+	Assert-Condition (-not [string]::IsNullOrWhiteSpace($plugin.repository)) 'plugin.json repository is required'
+
+	$marketplace = Get-Content -Raw -LiteralPath (Join-Path $repoRoot '.claude-plugin\marketplace.json') | ConvertFrom-Json
+	Assert-Condition ($marketplace.name -eq 'foryoung365-plugins') 'marketplace.json name must be foryoung365-plugins'
+	Assert-Condition ($marketplace.plugins.Count -gt 0) 'marketplace.json must include at least one plugin entry'
+	$pluginEntry = @($marketplace.plugins | Where-Object name -eq 'cpp-mmorpg-gameplay')
+	Assert-Condition ($pluginEntry.Count -eq 1) 'marketplace.json must include exactly one cpp-mmorpg-gameplay entry'
+	Assert-Condition ($pluginEntry[0].source.source -eq 'github') 'marketplace plugin entry must use github source'
+	Assert-Condition ($pluginEntry[0].source.repo -eq 'foryoung365/CppGameDev') 'marketplace plugin entry repo must be foryoung365/CppGameDev'
 
 	$settings = Get-Content -Raw -LiteralPath (Join-Path $repoRoot 'settings.json') | ConvertFrom-Json
 	Assert-Condition (-not [string]::IsNullOrWhiteSpace($settings.agent)) 'settings.json must define agent'
@@ -541,6 +552,8 @@ Invoke-ToolkitCheck 'cpp review fixtures cover approved and rejected markers' {
 Invoke-ToolkitCheck 'claude CLI smoke precheck is documented or manually pending' {
 	$readmeText = Get-FileText -Path (Join-Path $repoRoot 'README.md')
 	Assert-Condition ($readmeText -match [regex]::Escape('claude --plugin-dir I:\CppGameDev')) 'README.md missing plugin smoke-test command'
+	Assert-Condition ($readmeText -match [regex]::Escape('/plugin marketplace add foryoung365/CppGameDev')) 'README.md missing marketplace add command'
+	Assert-Condition ($readmeText -match [regex]::Escape('/plugin install cpp-mmorpg-gameplay@foryoung365-plugins')) 'README.md missing marketplace install command'
 
 	$claude = Get-Command claude -ErrorAction SilentlyContinue
 	if ($null -ne $claude) {
