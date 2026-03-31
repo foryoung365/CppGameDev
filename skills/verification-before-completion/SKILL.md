@@ -30,6 +30,7 @@ If the command has not been run in this session, the claim is not verified.
 - Compile success does not replace targeted validation.
 - You still need the right proof for the change, whether that is a repro, log, targeted check, or test.
 - Delivery stays feature-sized: one complete feature or one complete fix per commit-ready handoff.
+- If the work changed code, `03-plan.md`, `04-progress.md`, and `06-handoff.md` must all be current before a ready-for-delivery claim is valid.
 
 ## Do Not Say
 
@@ -49,3 +50,4 @@ If the command has not been run in this session, the claim is not verified.
 
 If the evidence is fresh and supports the claim, state the claim with the evidence.
 If it does not, report the actual status instead of guessing.
+If stage documents are missing or stale, report that gap instead of claiming readiness.

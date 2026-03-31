@@ -23,6 +23,16 @@ If the router upgrades the task, continue with the selected plan shape.
 
 After `pre-plan`, use host-project experience retrieval as secondary context when the current workflow calls for it.
 
+Persist the task state with `gp-task-stage-discipline`:
+
+- write `00-context.md` after context capture
+- write `01-pre-plan.md` after routing
+- write `02-debug.md` during debugging
+- write `03-plan.md` before any code edit
+- update `04-progress.md` during execution and before pausing
+- write `05-review.md` for review
+- write `06-handoff.md` before any ready-for-delivery conclusion
+
 ## Delivery Rules
 
 - SVN delivery is feature-sized: one complete feature or one complete fix per commit.
@@ -30,6 +40,8 @@ After `pre-plan`, use host-project experience retrieval as secondary context whe
 - Use the host project's standard build script or build command when proving compile success; that entry point should come from the host project's `claude.md` or equivalent project-local runtime config.
 - Compile success never replaces targeted validation.
 - Evidence must be fresh in the current session before claiming a fix or delivery boundary.
+- No code edit is allowed before `03-plan.md` exists.
+- No stage-complete claim is allowed if `04-progress.md` is stale or missing for the current execution stage.
 
 ## Experience Rules
 
@@ -40,6 +52,9 @@ After `pre-plan`, use host-project experience retrieval as secondary context whe
 - Otherwise use the default host-project paths:
   - `docs/cpp-mmorpg-gameplay/solutions/bugs/`
   - `docs/cpp-mmorpg-gameplay/solutions/patterns/`
+- Resolve the host-project task-doc root from the active host project's `claude.md` when it defines one.
+- Otherwise use the default host-project task-doc path:
+  - `docs/cpp-mmorpg-gameplay/tasks/`
 - No experience document is authoritative enough to override current verified evidence.
 - No experience document may be written unless evidence, conclusion, and validation are all explicit.
 
@@ -47,6 +62,7 @@ After `pre-plan`, use host-project experience retrieval as secondary context whe
 
 - Use `gameplay-context-guard` before gameplay edits or gameplay planning.
 - Use `task-intake-router` to emit the `pre-plan` fields: `goal`, `impact`, `unknowns`, `validation`, and `selected plan name`.
+- Use `gp-task-stage-discipline` whenever the task moves from one stage to the next.
 - Keep plan naming exact: `micro-plan`, `short-plan`, `full-plan`, `debugging-plan`.
 - Keep project C++ conventions intact unless the local standard explicitly allows a modern exception.
 - Recognize these manual experience commands:

@@ -23,3 +23,4 @@ Emit `pre-plan` with these fixed fields:
 - `selected plan name`
 
 `pre-plan` is the router's output stage, not a separate decision-maker.
+Persist that output to the host-project task directory as `01-pre-plan.md` before any selected implementation flow starts.

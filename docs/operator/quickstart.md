@@ -54,6 +54,32 @@ If you want the human-readable policy mirrors, read:
 
 Runtime authority still lives in plugin assets such as `skills/`, `agents/`, and `commands/`, not in docs alone.
 
+## Host-Project Task Docs
+
+This plugin now treats task-stage documents as required runtime anchors for large codebases and compressed contexts.
+
+Default host-project task-doc root:
+
+- `docs/cpp-mmorpg-gameplay/tasks/`
+
+Each task lives under:
+
+- `docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/`
+
+Stage files:
+
+- `00-context.md`
+- `01-pre-plan.md`
+- `02-debug.md`
+- `03-plan.md`
+- `04-progress.md`
+- `05-review.md`
+- `06-handoff.md`
+
+`03-plan.md` must exist before code edits begin.
+`04-progress.md` must be updated during execution and before pausing.
+`06-handoff.md` cannot claim ready state without fresh compile evidence when code changed.
+
 ## Host-Project Experience Library
 
 This plugin can retrieve and write verified gameplay experience docs, but the library lives in the **host project**, not in this plugin repository.
@@ -76,7 +102,7 @@ scripts\package-plugin.bat
 ```
 
 The package is written to `dist\cpp-mmorpg-gameplay-<version>.zip`.
-It contains plugin runtime assets only, not host-project experience docs, test fixtures, or internal maintainer docs.
+It contains plugin runtime assets only, not host-project experience docs, host-project task-stage docs, test fixtures, or internal maintainer docs.
 
 ## Build Integration Boundary
 

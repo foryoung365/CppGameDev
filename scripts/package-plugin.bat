@@ -49,7 +49,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"  'commands\gp-compound-refresh.md'," ^
 	"  'skills\gp-compound\SKILL.md'," ^
 	"  'skills\gp-compound-refresh\SKILL.md'," ^
-	"  'skills\gp-experience-check\SKILL.md'" ^
+	"  'skills\gp-experience-check\SKILL.md'," ^
+	"  'skills\gp-task-stage-discipline\SKILL.md'," ^
+	"  'skills\gp-task-stage-discipline\references\task-stage-templates.md'" ^
 	");" ^
 	"foreach ($relative in $expected) {" ^
 	"  $target = Join-Path $stage $relative;" ^

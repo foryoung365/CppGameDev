@@ -111,6 +111,8 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 		'skills\gp-compound-refresh\SKILL.md',
 		'skills\gp-compound-refresh\references\refresh-rules.md',
 		'skills\gp-experience-check\SKILL.md',
+		'skills\gp-task-stage-discipline\SKILL.md',
+		'skills\gp-task-stage-discipline\references\task-stage-templates.md',
 		'agents\gameplay-learnings-researcher.md',
 		'commands\gp-compound.md',
 		'commands\gp-compound-refresh.md',
@@ -430,7 +432,13 @@ Invoke-ToolkitCheck 'experience runtime contract stays host-project scoped and e
 				'Do not create or update any experience document unless **all three** are true:',
 				'the evidence is explicit',
 				'the conclusion is explicit',
-				'the validation is explicit'
+				'the validation is explicit',
+				'feature implementation walkthroughs',
+				'If removing the current feature name makes the document meaningless, refuse to write it.',
+				'Do **not** derive experience docs from:',
+				'the current task''s `05-review.md`',
+				'the current task''s `06-handoff.md`',
+				'raw `04-progress.md` execution notes'
 			)
 		},
 		@{
@@ -462,27 +470,106 @@ Invoke-ToolkitCheck 'experience runtime contract stays host-project scoped and e
 	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
 }
 
+Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and durable' {
+	$checks = @(
+		@{
+			Path = 'agents/gameplay-main.md'
+			Needles = @(
+				'docs/cpp-mmorpg-gameplay/tasks/',
+				'03-plan.md',
+				'04-progress.md',
+				'06-handoff.md'
+			)
+		},
+		@{
+			Path = 'skills/gp-task-stage-discipline/SKILL.md'
+			Needles = @(
+				'docs/cpp-mmorpg-gameplay/tasks/',
+				'YYYY-MM-DD-<task-slug>',
+				'00-context.md',
+				'01-pre-plan.md',
+				'02-debug.md',
+				'03-plan.md',
+				'04-progress.md',
+				'05-review.md',
+				'06-handoff.md',
+				'corrected mistakes and their verified fixes',
+				'Corrected pitfalls from this task',
+				'Transferable lesson candidates from this task',
+				'No `03-plan.md` -> no code edits',
+				'After context compression, session restart, or agent handoff:'
+			)
+		},
+		@{
+			Path = 'skills/lightweight-change-flow/SKILL.md'
+			Needles = @(
+				'03-plan.md',
+				'04-progress.md',
+				'fresh compile step'
+			)
+		},
+		@{
+			Path = 'skills/standard-feature-flow/SKILL.md'
+			Needles = @(
+				'03-plan.md',
+				'04-progress.md',
+				'fresh compile step'
+			)
+		},
+		@{
+			Path = 'docs/workflow/request-lifecycle.md'
+			Needles = @(
+				'docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/',
+				'03-plan.md',
+				'04-progress.md',
+				'06-handoff.md'
+			)
+		},
+		@{
+			Path = 'README.md'
+			Needles = @(
+				'docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/',
+				'03-plan.md',
+				'04-progress.md',
+				'06-handoff.md'
+			)
+		}
+	)
+
+	$missing = @()
+	foreach ($check in $checks) {
+		$text = Get-FileText -Path (Join-Path $repoRoot $check.Path)
+		foreach ($needle in $check.Needles) {
+			if ($text -notmatch [regex]::Escape($needle)) {
+				$missing += "$($check.Path) missing $needle"
+			}
+		}
+	}
+
+	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
+}
+
 Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 	$commandChecks = @(
 		@{
 			Path = 'commands/gp-intake.md'
-			Needles = @('gameplay-context-guard', 'task-intake-router', 'pre-plan', 'gp-experience-check', 'Experience summary')
+			Needles = @('gp-task-stage-discipline', 'gameplay-context-guard', 'task-intake-router', '00-context.md', '01-pre-plan.md', 'pre-plan', 'gp-experience-check', 'Experience summary')
 		},
 		@{
 			Path = 'commands/gp-debug.md'
-			Needles = @('gameplay-context-guard', 'task-intake-router', 'debugging-plan', 'systematic-debugging', 'gp-experience-check', 'candidate leads, not proof')
+			Needles = @('gp-task-stage-discipline', 'gameplay-context-guard', 'task-intake-router', 'debugging-plan', 'systematic-debugging', 'gp-experience-check', 'candidate leads, not proof', '02-debug.md', '03-plan.md')
 		},
 		@{
 			Path = 'commands/gp-review.md'
-			Needles = @('cpp-reviewer', 'gameplay-reviewer', 'gp-experience-check', 'Relevant prior learnings')
+			Needles = @('gp-task-stage-discipline', 'cpp-reviewer', 'gameplay-reviewer', 'gp-experience-check', 'Relevant prior learnings', '05-review.md')
 		},
 		@{
 			Path = 'commands/gp-svn-handoff.md'
-			Needles = @('svn-workspace-discipline', 'svn-delivery-handoff', 'fresh successful compile', 'gp-experience-check', 'merits `gp-compound`')
+			Needles = @('gp-task-stage-discipline', 'svn-workspace-discipline', 'svn-delivery-handoff', 'fresh successful compile', 'gp-experience-check', 'merits `gp-compound`', '06-handoff.md', 'corrected pitfalls', 'transferable lesson candidates')
 		},
 		@{
 			Path = 'commands/gp-compound.md'
-			Needles = @('gp-compound', 'host project', 'evidence', 'conclusion', 'validation')
+			Needles = @('gp-compound', 'host project', 'evidence', 'conclusion', 'validation', '05-review.md', '06-handoff.md')
 		},
 		@{
 			Path = 'commands/gp-compound-refresh.md'

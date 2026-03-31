@@ -82,7 +82,7 @@ Create an offline release package:
 scripts\package-plugin.bat
 ```
 
-The package includes runtime plugin assets only. It does not include host-project experience docs, test fixtures, or internal maintainer docs.
+The package includes runtime plugin assets only. It does not include host-project experience docs, host-project task-stage docs, test fixtures, or internal maintainer docs.
 
 ## Publication Boundary
 
@@ -105,6 +105,8 @@ Internal maintainer docs:
 
 - Project conventions override imported ECC defaults when they conflict.
 - The runtime request path is `request -> gameplay-context-guard -> task-intake-router -> pre-plan`.
+- Every stage transition must persist to host-project task docs under `docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/`, unless the host project's `claude.md` overrides that root.
+- `03-plan.md` is mandatory before code edits, `04-progress.md` must stay current during execution, and `06-handoff.md` cannot claim readiness without fresh compile evidence for code-changing work.
 - SVN delivery is feature-sized.
 - SVN commits are allowed only at one complete feature or one complete fix granularity.
 - A fresh successful compile is required before any commit-ready conclusion, and compile success does not replace targeted validation.

@@ -37,6 +37,7 @@ Prefer structured inputs:
 
 - gameplay context card
 - `pre-plan`
+- current task stage docs when they exist
 - current symptom description
 - current review scope
 - current handoff summary

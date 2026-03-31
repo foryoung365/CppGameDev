@@ -16,6 +16,8 @@ SVN delivery stays feature-sized.
 - SVN diff summary
 - Validation evidence
 - Fresh successful compile evidence
+- Corrected pitfalls from this task
+- Transferable lesson candidates from this task
 - Relevant prior learnings, when any exist
 - Commit message suggestion
 - Rollback or risk note
@@ -25,6 +27,7 @@ SVN delivery stays feature-sized.
 Do not hand off partial work as if it were a finished delivery.
 If the work is still missing validation or compile evidence, it is not ready.
 Historical experience can inform the handoff, but it does not override current verified evidence.
+Write the final handoff into the host project's task directory as `06-handoff.md`.
 
 ## Suggested Shape
 
@@ -34,6 +37,8 @@ Affected modules:
 SVN diff summary:
 Validation evidence:
 Fresh successful compile evidence:
+Corrected pitfalls:
+Transferable lesson candidates:
 Relevant prior learnings:
 Commit message suggestion:
 Rollback/risk note:
@@ -44,3 +49,4 @@ Rollback/risk note:
 - The handoff should stand on its own.
 - A reviewer should be able to understand what changed and why it is safe.
 - The fresh compile evidence must be explicit, not implied.
+- `06-handoff.md` is not ready if the required compile evidence is missing for code-changing work.

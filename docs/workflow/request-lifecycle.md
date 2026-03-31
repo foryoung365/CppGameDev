@@ -14,24 +14,37 @@ The flow works like this:
 2. `task-intake-router` uses the context card to classify the request by root-cause clarity, scope, and risk, then emits the `pre-plan` output.
 3. `pre-plan` is the router's output stage with fixed fields: `goal`, `impact`, `unknowns`, `validation`, and `selected plan name`.
 4. `gp-experience-check` can add an `Experience summary` after `pre-plan` using the host project's verified experience library.
+5. The active task also persists stage files in the host project under `docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/`, unless the host project's `claude.md` overrides that root.
+
+## Stage Documents
+
+Each task stage leaves a document behind so work can resume after context loss:
+
+- `00-context.md`: gameplay context card
+- `01-pre-plan.md`: routed pre-plan and selected plan name
+- `02-debug.md`: active debugging evidence and root-cause work
+- `03-plan.md`: actionable implementation plan, mandatory before edits
+- `04-progress.md`: execution state, blocker, and next step
+- `05-review.md`: review findings and residual risks
+- `06-handoff.md`: delivery summary and compile evidence
 
 ## Plan Shapes
 
 ### micro-plan
 
-Use for low-risk, single-domain changes that can be validated with a short checklist. Keep it tight and action-oriented.
+Use for low-risk, single-domain changes that can be validated with a short checklist. Keep it tight and action-oriented, but still persist the actionable steps in `03-plan.md`.
 
 ### short-plan
 
-Use for a single gameplay domain change with real regression risk. Break the work into a small number of subtasks and name the validation for each one.
+Use for a single gameplay domain change with real regression risk. Break the work into a small number of subtasks, name the validation for each one, and persist them in `03-plan.md`.
 
 ### full-plan
 
-Use for cross-module gameplay work, state-machine changes, protocol changes, persistence changes, or requests that need clearer scoping before implementation. This shape is the most explicit and should separate discovery, implementation, and verification.
+Use for cross-module gameplay work, state-machine changes, protocol changes, persistence changes, or requests that need clearer scoping before implementation. This shape is the most explicit and should separate discovery, implementation, and verification, while still leaving a `03-plan.md` pointer inside the task directory.
 
 ### debugging-plan
 
-Use when the root cause is not yet known. The goal is diagnosis first: reproduction, evidence collection, log review, and narrowing the fault before any fix is chosen.
+Use when the root cause is not yet known. The goal is diagnosis first: reproduction, evidence collection, log review, and narrowing the fault before any fix is chosen. Keep the active diagnosis in `02-debug.md`, then write `03-plan.md` before any fix starts.
 
 ## Routing Reminder
 
@@ -44,3 +57,4 @@ Use when the root cause is not yet known. The goal is diagnosis first: reproduct
 
 This document is for human operators. If a runtime rule and a doc summary ever diverge, fix the plugin runtime assets first and then update this mirror.
 Historical experience is secondary context only; current code, current evidence, and current validation remain the primary truth.
+Task-stage documents are required runtime anchors for recovering after context compression or session handoff.
