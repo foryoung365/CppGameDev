@@ -16,7 +16,7 @@ This repository is a Claude Code plugin package, not a standalone `.claude/` pro
 
 Use these plugin entry points first:
 
-- [`commands/intake.md`](./commands/intake.md)
+- [`commands/gp-intake.md`](./commands/gp-intake.md)
 - [`agents/gameplay-main.md`](./agents/gameplay-main.md)
 - [`docs/operator/quickstart.md`](./docs/operator/quickstart.md)
 
@@ -35,10 +35,10 @@ Internal maintainer provenance lives here:
 
 Use the plugin namespace:
 
-- `/cpp-mmorpg-gameplay:intake`
+- `/cpp-mmorpg-gameplay:gp-intake`
 - `/cpp-mmorpg-gameplay:gp-debug`
 - `/cpp-mmorpg-gameplay:gp-review`
-- `/cpp-mmorpg-gameplay:svn-handoff`
+- `/cpp-mmorpg-gameplay:gp-svn-handoff`
 - `/cpp-mmorpg-gameplay:gp-compound`
 - `/cpp-mmorpg-gameplay:gp-compound-refresh`
 

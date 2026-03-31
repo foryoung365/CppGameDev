@@ -35,7 +35,7 @@ After `pre-plan`, use host-project experience retrieval as secondary context whe
 
 - Historical experience is secondary context only.
 - Current code, current logs, current reproduction evidence, and current validation outrank historical experience.
-- Use host-project experience retrieval at `intake`, `gp-debug`, `gp-review`, and `svn-handoff`.
+- Use host-project experience retrieval at `gp-intake`, `gp-debug`, `gp-review`, and `gp-svn-handoff`.
 - Resolve the host-project experience library root from the active host project's `claude.md` when it defines one.
 - Otherwise use the default host-project paths:
   - `docs/cpp-mmorpg-gameplay/solutions/bugs/`

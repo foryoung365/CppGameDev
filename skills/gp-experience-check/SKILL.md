@@ -99,9 +99,9 @@ No relevant learnings found.
 
 This skill is used at:
 
-- `intake`
+- `gp-intake`
 - `gp-debug`
 - `gp-review`
-- `svn-handoff`
+- `gp-svn-handoff`
 
 It informs the current task, but it does not make the final decision for the current task.

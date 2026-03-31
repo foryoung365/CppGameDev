@@ -465,7 +465,7 @@ Invoke-ToolkitCheck 'experience runtime contract stays host-project scoped and e
 Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 	$commandChecks = @(
 		@{
-			Path = 'commands/intake.md'
+			Path = 'commands/gp-intake.md'
 			Needles = @('gameplay-context-guard', 'task-intake-router', 'pre-plan', 'gp-experience-check', 'Experience summary')
 		},
 		@{
@@ -477,7 +477,7 @@ Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 			Needles = @('cpp-reviewer', 'gameplay-reviewer', 'gp-experience-check', 'Relevant prior learnings')
 		},
 		@{
-			Path = 'commands/svn-handoff.md'
+			Path = 'commands/gp-svn-handoff.md'
 			Needles = @('svn-workspace-discipline', 'svn-delivery-handoff', 'fresh successful compile', 'gp-experience-check', 'merits `gp-compound`')
 		},
 		@{

@@ -1,4 +1,4 @@
-# Intake Command
+# GP Intake Command
 
 Route the current request through the plugin intake path.
 

@@ -5,14 +5,14 @@
               },
     "metadata":  {
                      "description":  "Claude Code plugins for C++ MMORPG gameplay server development and related workflows.",
-                     "version":  "1.0.4"
+                     "version":  "1.0.5"
                  },
     "plugins":  [
                     {
                         "name":  "cpp-mmorpg-gameplay",
                         "source":  "./",
                         "description":  "Claude Code workflow toolkit for C++ MMORPG gameplay server development with SVN-first delivery.",
-                        "version":  "1.0.4",
+                        "version":  "1.0.5",
                         "author":  {
                                        "name":  "foryoung365"
                                    },

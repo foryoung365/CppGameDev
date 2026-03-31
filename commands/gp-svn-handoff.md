@@ -1,4 +1,4 @@
-# SVN Handoff Command
+# GP SVN Handoff Command
 
 Use this command when one complete feature or one complete fix is ready for SVN delivery.
 

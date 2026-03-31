@@ -28,19 +28,19 @@ Or, if you want Claude Code to fetch the marketplace from GitHub:
 
 ## Start With These Commands
 
-- `/cpp-mmorpg-gameplay:intake`
+- `/cpp-mmorpg-gameplay:gp-intake`
 - `/cpp-mmorpg-gameplay:gp-debug`
 - `/cpp-mmorpg-gameplay:gp-review`
-- `/cpp-mmorpg-gameplay:svn-handoff`
+- `/cpp-mmorpg-gameplay:gp-svn-handoff`
 - `/cpp-mmorpg-gameplay:gp-compound`
 - `/cpp-mmorpg-gameplay:gp-compound-refresh`
 
 ## When To Use Each One
 
-- `intake`: start normal gameplay work and get the context card plus `pre-plan`
+- `gp-intake`: start normal gameplay work and get the context card plus `pre-plan`
 - `gp-debug`: diagnose a gameplay symptom when the root cause is still unknown
 - `gp-review`: run project-aware C++ review plus gameplay-risk review
-- `svn-handoff`: prepare a feature-sized SVN delivery handoff with validation evidence
+- `gp-svn-handoff`: prepare a feature-sized SVN delivery handoff with validation evidence
 - `gp-compound`: write a verified gameplay experience document into the host project
 - `gp-compound-refresh`: maintain verified gameplay experience documents in the host project
 
