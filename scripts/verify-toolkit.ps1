@@ -111,6 +111,8 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 		'skills\gp-compound-refresh\SKILL.md',
 		'skills\gp-compound-refresh\references\refresh-rules.md',
 		'skills\gp-experience-check\SKILL.md',
+		'skills\gp-subagent-orchestration\SKILL.md',
+		'skills\gp-subagent-orchestration\references\delegation-matrix.md',
 		'skills\gp-task-stage-discipline\SKILL.md',
 		'skills\gp-task-stage-discipline\references\task-stage-templates.md',
 		'agents\gameplay-learnings-researcher.md',
@@ -470,6 +472,85 @@ Invoke-ToolkitCheck 'experience runtime contract stays host-project scoped and e
 	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
 }
 
+Invoke-ToolkitCheck 'subagent orchestration contract stays explicit in runtime files' {
+	$checks = @(
+		@{
+			Path = 'agents/gameplay-main.md'
+			Needles = @(
+				'Use `gp-subagent-orchestration` when delegation helps, but keep all final judgments in the main agent.',
+				'Subagents may gather evidence, propose conclusions, draft summaries, or perform bounded execution, but they do not advance the task by themselves.'
+			)
+		},
+		@{
+			Path = 'skills/gp-subagent-orchestration/SKILL.md'
+			Needles = @(
+				'The main agent owns every judgment that changes task state.',
+				'Only the main agent may decide:',
+				'A subagent result is only supporting material until the main agent does both of these:',
+				'Without that main-agent acceptance step, the task has not advanced.'
+			)
+		},
+		@{
+			Path = 'skills/gp-subagent-orchestration/references/delegation-matrix.md'
+			Needles = @(
+				'## `gp-intake`',
+				'## `gp-debug`',
+				'## `03-plan.md`',
+				'## `gp-review`',
+				'## `gp-svn-handoff`',
+				'## `gp-compound`'
+			)
+		},
+		@{
+			Path = 'commands/gp-intake.md'
+			Needles = @(
+				'main agent as the only decision-maker',
+				'they must not make the stage call or write the accepted stage conclusion'
+			)
+		},
+		@{
+			Path = 'commands/gp-debug.md'
+			Needles = @(
+				'candidate leads, not proof',
+				'the main agent must accept the evidence and choose the diagnosis'
+			)
+		},
+		@{
+			Path = 'commands/gp-review.md'
+			Needles = @(
+				'main agent decide which findings are accepted and severity-ranked',
+				'they must not finalize the review'
+			)
+		},
+		@{
+			Path = 'commands/gp-svn-handoff.md'
+			Needles = @(
+				'subagents can only gather evidence and summarize candidates',
+				'Do not present partial work as delivery-ready, and do not let subagent output alone move the task into handoff.'
+			)
+		},
+		@{
+			Path = 'commands/gp-compound.md'
+			Needles = @(
+				'Treat `gp-compound` as a main-agent decision point',
+				'only the main agent may accept the final lesson and write it into the experience library'
+			)
+		}
+	)
+
+	$missing = @()
+	foreach ($check in $checks) {
+		$text = Get-FileText -Path (Join-Path $repoRoot $check.Path)
+		foreach ($needle in $check.Needles) {
+			if ($text -notmatch [regex]::Escape($needle)) {
+				$missing += "$($check.Path) missing $needle"
+			}
+		}
+	}
+
+	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
+}
+
 Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and durable' {
 	$checks = @(
 		@{
@@ -583,6 +664,43 @@ Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 		foreach ($needle in $commandCheck.Needles) {
 			if ($text -notmatch [regex]::Escape($needle)) {
 				$missing += "$($commandCheck.Path) missing $needle"
+			}
+		}
+	}
+
+	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
+}
+
+Invoke-ToolkitCheck 'specialist agents stay advisory under main-agent orchestration' {
+	$checks = @(
+		@{
+			Path = 'agents/gameplay-learnings-researcher.md'
+			Needles = @('candidate connections', 'draft summary for the main agent', 'Do not make a final ruling.')
+		},
+		@{
+			Path = 'agents/cpp-reviewer.md'
+			Needles = @('candidate findings', 'draft summary for the main agent', 'Do not issue the final ruling.')
+		},
+		@{
+			Path = 'agents/gameplay-reviewer.md'
+			Needles = @('candidate findings', 'draft summary for the main agent', 'Do not make the final gameplay ruling.')
+		},
+		@{
+			Path = 'agents/log-investigator.md'
+			Needles = @('candidate conclusions', 'draft summary for the main agent', 'Do not issue the final root-cause ruling.')
+		},
+		@{
+			Path = 'agents/cpp-build-resolver.md'
+			Needles = @('candidate fix conclusions', 'draft summary for the main agent', 'Do not claim the build is finally resolved.')
+		}
+	)
+
+	$missing = @()
+	foreach ($check in $checks) {
+		$text = Get-FileText -Path (Join-Path $repoRoot $check.Path)
+		foreach ($needle in $check.Needles) {
+			if ($text -notmatch [regex]::Escape($needle)) {
+				$missing += "$($check.Path) missing $needle"
 			}
 		}
 	}

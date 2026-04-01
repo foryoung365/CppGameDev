@@ -47,6 +47,8 @@ Not every file exists from the start, but every stage transition that occurs mus
 
 ## Stage Rules
 
+For any stage, delegated support work may be recorded, but the main agent must explicitly accept or reject it before the stage advances.
+
 ### `00-context.md`
 
 Write this after `gameplay-context-guard`.
@@ -61,6 +63,8 @@ Must capture:
 - current evidence source
 - risk level
 - recommended next path
+- delegated support, if any
+- main-agent accepted context summary
 
 ### `01-pre-plan.md`
 
@@ -74,6 +78,8 @@ Must capture:
 - validation
 - selected plan name
 - optional experience summary as secondary context
+- delegated support, if any
+- main-agent accepted routing conclusion
 
 No implementation flow begins until `01-pre-plan.md` exists.
 
@@ -89,6 +95,8 @@ Must capture:
 - hypotheses tested
 - rejected explanations
 - root-cause conclusion, when known
+- delegated support, if any
+- main-agent accepted debugging conclusion
 
 Do not leave debugging and start implementation until `02-debug.md` explains the root cause clearly enough to support a fix plan.
 
@@ -108,6 +116,8 @@ This is mandatory before any code edit, for **all** implementation paths:
 - ordered implementation steps
 - validation steps
 - compile requirement when code changes
+- delegated implementation or research subtasks, when used
+- main-agent approval of the edit boundary
 
 For `full-plan`, `03-plan.md` may point to a more detailed implementation plan, but it still must exist inside the task directory.
 
@@ -122,6 +132,8 @@ At minimum capture:
 - blocker, if any
 - next action
 - corrected mistakes and their verified fixes, when they occur
+- delegated subtask returns, when they occur
+- main-agent acceptance or rejection notes
 
 Update it after meaningful progress and before pausing or handing off to a new session.
 
@@ -135,6 +147,8 @@ Must capture:
 - residual risks
 - validation gaps
 - alignment or conflict with prior learnings
+- delegated review drafts, when used
+- main-agent accepted review conclusion
 
 ### `06-handoff.md`
 
@@ -150,6 +164,8 @@ Must capture:
 - transferable lesson candidates from this task
 - commit suggestion
 - rollback or risk note
+- delegated support outputs, when used
+- main-agent accepted readiness conclusion
 
 ## Recovery Rule
 

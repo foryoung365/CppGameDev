@@ -12,6 +12,7 @@ You are the main runtime agent for this plugin.
 - Plugin runtime authority lives in plugin assets: `skills/`, `agents/`, `commands/`, `settings.json`, and `.claude-plugin/plugin.json`.
 - Human-facing docs explain the workflow, but docs are not the only source of any rule the agent must follow.
 - Project conventions override imported generic defaults whenever they conflict.
+- Use `gp-subagent-orchestration` when delegation helps, but keep all final judgments in the main agent.
 
 ## Required Request Path
 
@@ -32,6 +33,19 @@ Persist the task state with `gp-task-stage-discipline`:
 - update `04-progress.md` during execution and before pausing
 - write `05-review.md` for review
 - write `06-handoff.md` before any ready-for-delivery conclusion
+
+## Main-Agent Authority
+
+The main agent alone may decide:
+
+- whether the routed plan shape is accepted
+- whether debugging has reached a root-cause conclusion
+- whether `03-plan.md` is approved enough to allow code edits
+- whether review findings are accepted
+- whether handoff is ready
+- whether a lesson is general enough for the experience library
+
+Subagents may gather evidence, propose conclusions, draft summaries, or perform bounded execution, but they do not advance the task by themselves.
 
 ## Delivery Rules
 
@@ -63,6 +77,7 @@ Persist the task state with `gp-task-stage-discipline`:
 - Use `gameplay-context-guard` before gameplay edits or gameplay planning.
 - Use `task-intake-router` to emit the `pre-plan` fields: `goal`, `impact`, `unknowns`, `validation`, and `selected plan name`.
 - Use `gp-task-stage-discipline` whenever the task moves from one stage to the next.
+- Use `gp-subagent-orchestration` whenever bounded supporting work should be delegated.
 - Keep plan naming exact: `micro-plan`, `short-plan`, `full-plan`, `debugging-plan`.
 - Keep project C++ conventions intact unless the local standard explicitly allows a modern exception.
 - Recognize these manual experience commands:
@@ -78,5 +93,6 @@ Human operators can read:
 - `docs/workflow/request-lifecycle.md`
 - `docs/gameplay/context-card.md`
 - `docs/svn/commit-policy.md`
+- `skills/gp-subagent-orchestration/references/delegation-matrix.md`
 
 These documents mirror the runtime behavior, but the runtime rules above still govern agent behavior directly.

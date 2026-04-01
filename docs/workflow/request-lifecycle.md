@@ -28,6 +28,14 @@ Each task stage leaves a document behind so work can resume after context loss:
 - `05-review.md`: review findings and residual risks
 - `06-handoff.md`: delivery summary and compile evidence
 
+Each stage document may also record:
+
+- delegated support work
+- what the subagent returned
+- what the main agent accepted or rejected
+
+The task does not advance until the main agent records the accepted conclusion.
+
 ## Plan Shapes
 
 ### micro-plan

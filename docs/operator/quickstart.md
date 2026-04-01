@@ -35,6 +35,14 @@ Or, if you want Claude Code to fetch the marketplace from GitHub:
 - `/cpp-mmorpg-gameplay:gp-compound`
 - `/cpp-mmorpg-gameplay:gp-compound-refresh`
 
+## Main-Agent Orchestrated Model
+
+This plugin is not a fully autonomous subagent pipeline.
+
+- The main agent owns all final decisions.
+- Subagents are used for bounded support work such as search, evidence gathering, draft reviews, log tracing, build-output summarization, and lesson-candidate extraction.
+- A subagent result does not move the task forward until the main agent accepts it and records that acceptance in the task docs.
+
 ## When To Use Each One
 
 - `gp-intake`: start normal gameplay work and get the context card plus `pre-plan`

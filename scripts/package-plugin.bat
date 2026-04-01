@@ -50,6 +50,8 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"  'skills\gp-compound\SKILL.md'," ^
 	"  'skills\gp-compound-refresh\SKILL.md'," ^
 	"  'skills\gp-experience-check\SKILL.md'," ^
+	"  'skills\gp-subagent-orchestration\SKILL.md'," ^
+	"  'skills\gp-subagent-orchestration\references\delegation-matrix.md'," ^
 	"  'skills\gp-task-stage-discipline\SKILL.md'," ^
 	"  'skills\gp-task-stage-discipline\references\task-stage-templates.md'" ^
 	");" ^

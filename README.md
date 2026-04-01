@@ -105,6 +105,7 @@ Internal maintainer docs:
 
 - Project conventions override imported ECC defaults when they conflict.
 - The runtime request path is `request -> gameplay-context-guard -> task-intake-router -> pre-plan`.
+- The workflow is main-agent orchestrated: subagents may do bounded support work, but the main agent alone decides stage transitions, root cause acceptance, plan approval, review conclusions, handoff readiness, and experience-library promotion.
 - Every stage transition must persist to host-project task docs under `docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/`, unless the host project's `claude.md` overrides that root.
 - `03-plan.md` is mandatory before code edits, `04-progress.md` must stay current during execution, and `06-handoff.md` cannot claim readiness without fresh compile evidence for code-changing work.
 - SVN delivery is feature-sized.

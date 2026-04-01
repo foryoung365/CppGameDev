@@ -21,6 +21,8 @@ Event chain and call path:
 Current evidence source:
 Risk level:
 Recommended next path:
+Delegated support:
+Main-agent accepted context summary:
 ```
 
 ## `01-pre-plan.md`
@@ -34,6 +36,8 @@ Unknowns:
 Validation:
 Selected plan name:
 Experience summary:
+Delegated support:
+Main-agent accepted routing conclusion:
 ```
 
 ## `02-debug.md`
@@ -47,6 +51,8 @@ Evidence gathered:
 Hypotheses tested:
 Rejected explanations:
 Root-cause conclusion:
+Delegated support:
+Main-agent accepted debugging conclusion:
 ```
 
 ## `03-plan.md`
@@ -59,6 +65,8 @@ Files to modify:
 Implementation steps:
 Validation steps:
 Compile requirement:
+Delegated subtasks:
+Main-agent approved edit boundary:
 Notes:
 ```
 
@@ -72,6 +80,8 @@ Remaining:
 Blocker:
 Next action:
 Corrected mistakes:
+Delegated returns:
+Main-agent acceptance notes:
 ```
 
 ## `05-review.md`
@@ -83,6 +93,8 @@ Findings:
 Residual risks:
 Validation gaps:
 Prior learnings alignment:
+Delegated review drafts:
+Main-agent accepted review conclusion:
 ```
 
 ## `06-handoff.md`
@@ -96,6 +108,8 @@ Validation evidence:
 Fresh compile evidence:
 Corrected pitfalls:
 Transferable lesson candidates:
+Delegated support outputs:
+Main-agent accepted readiness conclusion:
 Commit suggestion:
 Rollback or risk note:
 ```

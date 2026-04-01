@@ -17,6 +17,7 @@ Historical experience never outranks:
 - current validation results
 
 If a prior learning conflicts with current verified evidence, report the conflict and defer to the current evidence.
+The skill may inform the main agent, but it never makes the stage decision, never writes the accepted conclusion, and never advances the workflow by itself.
 
 ## Library Resolution
 
@@ -67,6 +68,7 @@ Extract stable search terms from:
 4. Use body-content search only as a fallback.
 5. Return only strong matches and the smallest useful set of medium matches.
 6. Skip weak matches.
+7. If a subagent is used to search or summarize, it may only gather candidate learnings, matched files, and short takeaways; the main agent must decide what is relevant and whether it should be carried forward.
 
 ## Output Format
 
@@ -106,3 +108,4 @@ This skill is used at:
 - `gp-svn-handoff`
 
 It informs the current task, but it does not make the final decision for the current task.
+Main-agent rule: experience-check output is secondary context only; any accepted conclusion must be written into the active stage document by the main agent.
