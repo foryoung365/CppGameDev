@@ -29,20 +29,22 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"$dist = Join-Path $repo 'dist';" ^
 	"$stage = Join-Path $dist $plugin.name;" ^
 	"$zip = Join-Path $dist ($plugin.name + '-' + $plugin.version + '.zip');" ^
-	"$paths = @('.claude-plugin','agents','commands','skills','docs\operator','docs\workflow','docs\gameplay','docs\svn');" ^
+	"$packageRoots = @('.claude-plugin','agents','commands','skills','docs/operator','docs/workflow','docs/gameplay','docs/svn','README.md','settings.json');" ^
 	"Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue;" ^
 	"Remove-Item -LiteralPath $zip -Force -ErrorAction SilentlyContinue;" ^
 	"New-Item -ItemType Directory -Force -Path $stage | Out-Null;" ^
-	"foreach ($relative in $paths) {" ^
-	"  $source = Join-Path $repo $relative;" ^
-	"  if (-not (Test-Path -LiteralPath $source)) { throw 'Missing source path: ' + $source };" ^
-	"  $destination = Join-Path $stage $relative;" ^
+	"$trackedFiles = @(& git -C $repo ls-files --cached -- $packageRoots);" ^
+	"if ($LASTEXITCODE -ne 0) { throw 'Failed to enumerate tracked package files' };" ^
+	"if ($trackedFiles.Count -eq 0) { throw 'No tracked package files were resolved' };" ^
+	"foreach ($relative in $trackedFiles) {" ^
+	"  $relativePath = $relative.Replace('/', '\');" ^
+	"  $source = Join-Path $repo $relativePath;" ^
+	"  if (-not (Test-Path -LiteralPath $source)) { throw 'Missing tracked source path: ' + $source };" ^
+	"  $destination = Join-Path $stage $relativePath;" ^
 	"  $parent = Split-Path -Path $destination -Parent;" ^
 	"  New-Item -ItemType Directory -Force -Path $parent | Out-Null;" ^
-	"  Copy-Item -LiteralPath $source -Destination $destination -Recurse -Force;" ^
+	"  Copy-Item -LiteralPath $source -Destination $destination -Force;" ^
 	"}" ^
-	"Copy-Item -LiteralPath (Join-Path $repo 'README.md') -Destination (Join-Path $stage 'README.md') -Force;" ^
-	"Copy-Item -LiteralPath (Join-Path $repo 'settings.json') -Destination (Join-Path $stage 'settings.json') -Force;" ^
 	"$expected = @(" ^
 	"  'agents\gameplay-learnings-researcher.md'," ^
 	"  'commands\gp-compound.md'," ^

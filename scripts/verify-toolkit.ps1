@@ -45,6 +45,16 @@ function Get-FileText {
 	return [System.IO.File]::ReadAllText($Path)
 }
 
+function Remove-DirectoryIfPresent {
+	param(
+		[string]$Path
+	)
+
+	if (Test-Path -LiteralPath $Path) {
+		Remove-Item -LiteralPath $Path -Recurse -Force
+	}
+}
+
 function Get-SkillFiles {
 	$skillRoot = Join-Path $repoRoot 'skills'
 	Assert-Condition (Test-Path -LiteralPath $skillRoot) "Missing skills directory: $skillRoot"
@@ -567,6 +577,8 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 			Needles = @(
 				'docs/cpp-mmorpg-gameplay/tasks/',
 				'YYYY-MM-DD-<task-slug>',
+				'Create a new dated task directory when intake is starting a new task instance.',
+				'Reuse the active task directory when later stages are continuing the same task.',
 				'00-context.md',
 				'01-pre-plan.md',
 				'02-debug.md',
@@ -628,6 +640,66 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 	}
 
 	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
+}
+
+Invoke-ToolkitCheck 'offline package excludes retired untracked runtime files' {
+	Add-Type -AssemblyName System.IO.Compression.FileSystem
+
+	$tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('cppgamedev-package-proof-' + [guid]::NewGuid().ToString('N'))
+	$packageRepo = Join-Path $tempRoot 'repo'
+
+	try {
+		New-Item -ItemType Directory -Force -Path $tempRoot | Out-Null
+
+		$copyPaths = @(
+			'.git',
+			'.claude-plugin',
+			'agents',
+			'commands',
+			'skills',
+			'docs',
+			'scripts',
+			'README.md',
+			'settings.json'
+		)
+
+		foreach ($relativePath in $copyPaths) {
+			$source = Join-Path $repoRoot $relativePath
+			$destination = Join-Path $packageRepo $relativePath
+			$parent = Split-Path -Path $destination -Parent
+			New-Item -ItemType Directory -Force -Path $parent | Out-Null
+			Copy-Item -LiteralPath $source -Destination $destination -Recurse -Force
+		}
+
+		$staleCommand = Join-Path $packageRepo 'commands\intake.md'
+		[System.IO.File]::WriteAllText($staleCommand, "# stale command`n")
+
+		$packageScript = Join-Path $packageRepo 'scripts\package-plugin.bat'
+		& $packageScript | Out-Null
+		if ($LASTEXITCODE -ne 0) {
+			throw 'package-plugin.bat failed in temporary repository copy'
+		}
+
+		$zipPath = Get-ChildItem -LiteralPath (Join-Path $packageRepo 'dist') -Filter '*.zip' |
+			Sort-Object LastWriteTime -Descending |
+			Select-Object -First 1 -ExpandProperty FullName
+		Assert-Condition (-not [string]::IsNullOrWhiteSpace($zipPath)) 'package-plugin.bat did not produce a zip artifact'
+
+		$zip = [System.IO.Compression.ZipFile]::OpenRead($zipPath)
+		try {
+			$entryNames = @(
+				$zip.Entries |
+					ForEach-Object { $_.FullName.Replace('\', '/') }
+			)
+			Assert-Condition ($entryNames -contains 'commands/gp-intake.md') 'packaged zip is missing commands/gp-intake.md'
+			Assert-Condition (-not ($entryNames -contains 'commands/intake.md')) 'packaged zip must not include stale commands/intake.md'
+			Assert-Condition (-not ($entryNames -contains 'commands/svn-handoff.md')) 'packaged zip must not include stale commands/svn-handoff.md'
+		} finally {
+			$zip.Dispose()
+		}
+	} finally {
+		Remove-DirectoryIfPresent -Path $tempRoot
+	}
 }
 
 Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {

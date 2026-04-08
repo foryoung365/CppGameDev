@@ -2,7 +2,7 @@
 
 Route the current request through the plugin intake path.
 
-1. Use `gp-task-stage-discipline` to resolve the host-project task-doc root and create a new dated task directory `YYYY-MM-DD-<task-slug>`, unless the user explicitly told you to continue an existing task.
+1. Use `gp-task-stage-discipline` to resolve the host-project task-doc root. Create a new dated task directory `YYYY-MM-DD-<task-slug>` when intake is starting a new task instance; otherwise reuse the active task directory when the request is continuing that same task.
 2. Run `gameplay-context-guard` and produce the full 8-field context card.
 3. Write the context card to `<task-dir>/00-context.md`.
 4. Pass the completed context card to `task-intake-router`.

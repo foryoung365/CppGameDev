@@ -29,9 +29,10 @@ Each task lives under:
 <task-root>/YYYY-MM-DD-<task-slug>/
 ```
 
-Create a new dated task directory for each new task instance.
-Reuse an existing task directory only when the user explicitly says to continue that exact task.
-The dated task directory protects new work from accidentally reusing stale stage docs from an older task with a similar name.
+Create a new dated task directory when intake is starting a new task instance.
+Reuse the active task directory when later stages are continuing the same task.
+Only create a fresh dated directory mid-flow when the user explicitly starts a different task or asks to fork the current one.
+The dated task directory protects new work from accidentally reusing stale stage docs from an older task with a similar name, while still keeping one task's stages together.
 
 Required stage files:
 

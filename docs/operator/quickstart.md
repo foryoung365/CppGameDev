@@ -74,6 +74,9 @@ Each task lives under:
 
 - `docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/`
 
+Create a new dated directory when intake starts a new task instance.
+Reuse the active task directory when later stages continue that same task.
+
 Stage files:
 
 - `00-context.md`
