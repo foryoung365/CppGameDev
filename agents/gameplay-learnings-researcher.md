@@ -87,18 +87,17 @@ Skip weak matches.
 Return:
 
 ```markdown
-## Evidence Summary
+## Experience Summary
 
-### Evidence
-- [Observed fact from the experience library]
-
-### Candidate Connections
+### Relevant Prior Learnings
 #### 1. [Title]
 - Track:
 - File:
 - Relevance:
 - Key takeaway:
 - Priority: strong|medium
+- Candidate connection:
+- Evidence:
 
 ### Draft Summary
 - [Short, neutral summary the main agent can reuse in 02-debug.md or 06-handoff.md]
@@ -110,7 +109,7 @@ Return:
 If there are no strong or medium matches, return:
 
 ```markdown
-## Evidence Summary
+## Experience Summary
 
 No relevant learnings found.
 

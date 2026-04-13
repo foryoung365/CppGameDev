@@ -58,12 +58,12 @@ Required body sections:
 
 Required body sections:
 
-- `Context`
-- `Guidance`
-- `Why This Matters`
+- `Rule`
+- `Why`
 - `When To Apply`
-- `Counterexamples`
-- `Validation Notes`
+- `When Not To Apply`
+- `Evidence And Validation`
+- `Incident Source`
 
 ## Recommended Enumerations
 
@@ -91,23 +91,25 @@ Required body sections:
 
 ### `knowledge_type`
 
-- `best-practice`
-- `gameplay-pattern`
+- `technical-pattern`
+- `engineering-guardrail`
 - `workflow-guardrail`
 - `debugging-guideline`
 - `delivery-guideline`
+- `codebase-contract`
 
 ### `component`
 
-- `manager`
-- `service`
-- `handler`
-- `state-machine`
+- `build`
+- `encoding`
+- `workflow`
 - `config-loader`
 - `persistence`
 - `scheduler`
 - `script-bridge`
-- `workflow`
+- `sql-location`
+- `macro-pattern`
+- `lifetime-pattern`
 - `other`
 
 ### `severity`
