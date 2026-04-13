@@ -7,7 +7,8 @@ Use this command when one complete feature or one complete fix is ready for SVN 
 3. Confirm the change is feature-sized and self-contained.
 4. Require a fresh successful compile before the handoff is considered ready, using the host project's standard build script or build command from its `claude.md` or equivalent project-local config.
 5. Run `gp-experience-check` and note any relevant prior learnings from the host project as secondary context only.
-6. Let the main agent decide whether the work is truly delivery-ready, whether it conflicts with known learnings, and whether it merits `gp-compound`; subagents can only gather evidence and summarize candidates.
-7. Produce the `svn-delivery-handoff` summary with purpose, affected modules, validation evidence, fresh successful compile evidence, corrected pitfalls from this task, transferable lesson candidates, commit message suggestion, and rollback or risk note.
-8. Write the accepted handoff result to `<task-dir>/06-handoff.md`.
-9. Do not present partial work as delivery-ready, and do not let subagent output alone move the task into handoff.
+6. When handoff inputs are already stable, prefer parallel delegation for independent support work such as diff summary, build-output summary, validation-evidence collation, and prior-learning alignment.
+7. Let the main agent decide whether the work is truly delivery-ready, whether it conflicts with known learnings, and whether it merits `gp-compound`; subagents can only gather evidence and summarize candidates.
+8. Produce the `svn-delivery-handoff` summary with purpose, affected modules, validation evidence, fresh successful compile evidence, corrected pitfalls from this task, transferable lesson candidates, commit message suggestion, and rollback or risk note.
+9. Write the accepted handoff result to `<task-dir>/06-handoff.md`.
+10. Do not present partial work as delivery-ready, and do not let subagent output alone move the task into handoff.

@@ -7,11 +7,12 @@ Use this command to maintain the active host project's verified gameplay experie
    - explicit root from the active host project's `claude.md`, if present
    - otherwise `docs/cpp-mmorpg-gameplay/solutions/bugs/` and `docs/cpp-mmorpg-gameplay/solutions/patterns/`
 3. Review the selected scope using only verified current evidence.
-4. Allow only these actions:
+4. When multiple docs, tracks, or duplicate clusters can be reviewed independently, prefer parallel review work and combine the accepted conclusions only at the main-agent decision point.
+5. Allow only these actions:
    - `keep`
    - `update`
    - `consolidate`
    - `delete`
-5. Refuse inferred successor docs and speculative rewrites.
+6. Refuse inferred successor docs and speculative rewrites.
 
 If the host project has no experience library yet, report that and stop cleanly.

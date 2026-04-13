@@ -38,6 +38,14 @@ Subagents may be used for:
 - bounded implementation tasks inside the approved plan
 - lesson-candidate extraction from `05-review.md` and `06-handoff.md`
 
+## Parallel Preference
+
+When two or more bounded supporting tasks are independent, prefer delegating them in parallel.
+
+- Keep each delegated task scoped clearly enough that its evidence or draft output can be reviewed on its own.
+- Converge the parallel work at the next main-agent decision point instead of serializing unrelated support tasks by default.
+- Do not parallelize work whose output depends on another delegated result that has not been accepted yet.
+
 ## Task-Stage Interaction Rule
 
 A subagent result is only supporting material until the main agent does both of these:

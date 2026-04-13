@@ -40,14 +40,15 @@ Or, if you want Claude Code to fetch the marketplace from GitHub:
 This plugin is not a fully autonomous subagent pipeline.
 
 - The main agent owns all final decisions.
-- Subagents are used for bounded support work such as search, evidence gathering, draft reviews, log tracing, build-output summarization, and lesson-candidate extraction.
+- Subagents are used for bounded support work such as search, evidence gathering, draft reviews, checklist review drafts, log tracing, build-output summarization, and lesson-candidate extraction.
+- When two or more bounded support tasks are independent, prefer parallel delegation and converge them at the next main-agent decision point.
 - A subagent result does not move the task forward until the main agent accepts it and records that acceptance in the task docs.
 
 ## When To Use Each One
 
 - `gp-intake`: start normal gameplay work and get the context card plus `pre-plan`
 - `gp-debug`: diagnose a gameplay symptom when the root cause is still unknown
-- `gp-review`: run project-aware C++ review plus gameplay-risk review
+- `gp-review`: run project-aware C++ review, gameplay-risk review, and checklist review
 - `gp-svn-handoff`: prepare a feature-sized SVN delivery handoff with validation evidence
 - `gp-compound`: write a verified gameplay experience document into the host project
 - `gp-compound-refresh`: maintain verified gameplay experience documents in the host project
@@ -89,6 +90,7 @@ Stage files:
 
 `03-plan.md` must exist before code edits begin.
 `04-progress.md` must be updated during execution and before pausing.
+`05-review.md` should record findings, `Checklist coverage`, residual risks, validation gaps, and prior-learning alignment.
 `06-handoff.md` cannot claim ready state without fresh compile evidence when code changed.
 
 ## Host-Project Experience Library

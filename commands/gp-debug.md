@@ -9,5 +9,5 @@ Use this command when a gameplay symptom needs diagnosis before a fix is chosen.
 5. Treat prior learnings and subagent findings as candidate leads, not proof, and do not let them advance the stage on their own.
 6. Define the symptom, reproduction, and evidence before choosing a fix, and keep them current in `<task-dir>/02-debug.md`.
 7. Use log, boundary, and call-path evidence to explain the failure.
-8. If subagents help with debug work, limit them to routine support tasks such as reproducing, collecting logs, comparing traces, and summarizing candidate causes; the main agent must accept the evidence and choose the diagnosis.
+8. If subagents help with debug work, prefer parallel delegation for independent tasks such as reproducing, collecting logs, comparing traces, and retrieving related learnings; the main agent must accept the evidence and choose the diagnosis.
 9. If the root cause becomes clear, the main agent records it explicitly in `<task-dir>/02-debug.md`, then writes `<task-dir>/03-plan.md` before any code edit starts.

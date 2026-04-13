@@ -46,12 +46,15 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"  Copy-Item -LiteralPath $source -Destination $destination -Force;" ^
 	"}" ^
 	"$expected = @(" ^
+	"  'agents\checklist-reviewer.md'," ^
 	"  'agents\gameplay-learnings-researcher.md'," ^
 	"  'commands\gp-compound.md'," ^
 	"  'commands\gp-compound-refresh.md'," ^
 	"  'skills\gp-compound\SKILL.md'," ^
 	"  'skills\gp-compound-refresh\SKILL.md'," ^
 	"  'skills\gp-experience-check\SKILL.md'," ^
+	"  'skills\gp-review-checklist\SKILL.md'," ^
+	"  'skills\gp-review-checklist\references\code-review-checklist.md'," ^
 	"  'skills\gp-subagent-orchestration\SKILL.md'," ^
 	"  'skills\gp-subagent-orchestration\references\delegation-matrix.md'," ^
 	"  'skills\gp-task-stage-discipline\SKILL.md'," ^

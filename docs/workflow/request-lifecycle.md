@@ -26,7 +26,7 @@ Each task stage leaves a document behind so work can resume after context loss:
 - `02-debug.md`: active debugging evidence and root-cause work
 - `03-plan.md`: actionable implementation plan, mandatory before edits
 - `04-progress.md`: execution state, blocker, and next step
-- `05-review.md`: review findings and residual risks
+- `05-review.md`: review findings, checklist coverage, and residual risks
 - `06-handoff.md`: delivery summary and compile evidence
 
 Each stage document may also record:
@@ -36,6 +36,8 @@ Each stage document may also record:
 - what the main agent accepted or rejected
 
 The task does not advance until the main agent records the accepted conclusion.
+
+During `gp-review`, the main agent may collect C++ review, gameplay review, checklist review, and relevant prior learnings in parallel before accepting the final review conclusion.
 
 ## Plan Shapes
 

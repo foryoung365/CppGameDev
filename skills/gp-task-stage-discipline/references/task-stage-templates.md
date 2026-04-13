@@ -90,6 +90,7 @@ Main-agent acceptance notes:
 # Review
 
 Findings:
+Checklist coverage:
 Residual risks:
 Validation gaps:
 Prior learnings alignment:

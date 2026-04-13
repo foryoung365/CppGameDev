@@ -145,6 +145,7 @@ Write this when review happens.
 Must capture:
 
 - findings
+- checklist coverage
 - residual risks
 - validation gaps
 - alignment or conflict with prior learnings

@@ -11,6 +11,7 @@
   - codebase search
   - related-module discovery
   - prior-learning retrieval
+  - run independent support tasks in parallel when the context card inputs are stable
 
 ## `gp-debug`
 
@@ -23,6 +24,7 @@
   - call-path tracing
   - evidence collation
   - related-learning retrieval
+  - run independent reproductions, log extraction, trace comparison, and related-learning retrieval in parallel when they do not depend on each other
 
 ## `03-plan.md`
 
@@ -35,6 +37,7 @@
   - draft validation steps
   - draft compile entry notes
   - perform bounded implementation work after approval
+  - run independent planning support tasks in parallel after the main agent approves scope
 
 ## `gp-review`
 
@@ -45,7 +48,9 @@
 - Subagents may do:
   - cpp review draft
   - gameplay review draft
+  - checklist review draft
   - prior-learning alignment summary
+  - run `cpp review draft`, `gameplay review draft`, `checklist review draft`, and `prior-learning alignment summary` in parallel whenever the review scope is stable
 
 ## `gp-svn-handoff`
 
@@ -58,6 +63,8 @@
   - build output summary
   - validation evidence collation
   - draft commit message
+  - prior-learning alignment summary
+  - run diff summary, build output summary, validation evidence collation, and prior-learning alignment in parallel once inputs are stable
 
 ## `gp-compound`
 
@@ -69,3 +76,17 @@
   - extract lesson candidates from `05-review.md` and `06-handoff.md`
   - search for overlapping existing docs
   - draft a candidate knowledge or bug entry
+  - run lesson-candidate extraction and overlap search in parallel when they are independent
+
+## `gp-compound-refresh`
+
+- Main agent must do:
+  - decide whether evidence supports `keep`, `update`, `consolidate`, or `delete`
+  - approve each refresh action
+  - finalize the accepted refresh result
+- Subagents may do:
+  - bug-track scan
+  - knowledge-track scan
+  - duplicate-cluster detection
+  - evidence collation
+  - run independent track scans or doc reviews in parallel when the evidence sources do not overlap

@@ -121,10 +121,13 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 		'skills\gp-compound-refresh\SKILL.md',
 		'skills\gp-compound-refresh\references\refresh-rules.md',
 		'skills\gp-experience-check\SKILL.md',
+		'skills\gp-review-checklist\SKILL.md',
+		'skills\gp-review-checklist\references\code-review-checklist.md',
 		'skills\gp-subagent-orchestration\SKILL.md',
 		'skills\gp-subagent-orchestration\references\delegation-matrix.md',
 		'skills\gp-task-stage-discipline\SKILL.md',
 		'skills\gp-task-stage-discipline\references\task-stage-templates.md',
+		'agents\checklist-reviewer.md',
 		'agents\gameplay-learnings-researcher.md',
 		'commands\gp-compound.md',
 		'commands\gp-compound-refresh.md',
@@ -561,6 +564,85 @@ Invoke-ToolkitCheck 'subagent orchestration contract stays explicit in runtime f
 	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
 }
 
+Invoke-ToolkitCheck 'parallel delegation preference stays explicit in runtime files' {
+	$checks = @(
+		@{
+			Path = 'agents/gameplay-main.md'
+			Needles = @(
+				'Prefer parallel delegation whenever two or more bounded supporting tasks are independent and the next main-agent decision can wait for their combined results.'
+			)
+		},
+		@{
+			Path = 'skills/gp-subagent-orchestration/SKILL.md'
+			Needles = @(
+				'When two or more bounded supporting tasks are independent, prefer delegating them in parallel.',
+				'Converge the parallel work at the next main-agent decision point instead of serializing unrelated support tasks by default.'
+			)
+		},
+		@{
+			Path = 'skills/gp-subagent-orchestration/references/delegation-matrix.md'
+			Needles = @(
+				'run independent support tasks in parallel when the context card inputs are stable',
+				'run independent reproductions, log extraction, trace comparison, and related-learning retrieval in parallel when they do not depend on each other',
+				'run independent planning support tasks in parallel after the main agent approves scope',
+				'run `cpp review draft`, `gameplay review draft`, `checklist review draft`, and `prior-learning alignment summary` in parallel whenever the review scope is stable',
+				'run diff summary, build output summary, validation evidence collation, and prior-learning alignment in parallel once inputs are stable',
+				'run lesson-candidate extraction and overlap search in parallel when they are independent',
+				'## `gp-compound-refresh`',
+				'run independent track scans or doc reviews in parallel when the evidence sources do not overlap'
+			)
+		},
+		@{
+			Path = 'commands/gp-intake.md'
+			Needles = @(
+				'prefer parallel delegation for independent support tasks'
+			)
+		},
+		@{
+			Path = 'commands/gp-debug.md'
+			Needles = @(
+				'prefer parallel delegation for independent tasks'
+			)
+		},
+		@{
+			Path = 'commands/gp-review.md'
+			Needles = @(
+				'prefer running the C++ review, gameplay review, checklist review, and prior-learning alignment in parallel whenever they are independent'
+			)
+		},
+		@{
+			Path = 'commands/gp-svn-handoff.md'
+			Needles = @(
+				'prefer parallel delegation for independent support work such as diff summary, build-output summary, validation-evidence collation, and prior-learning alignment'
+			)
+		},
+		@{
+			Path = 'commands/gp-compound.md'
+			Needles = @(
+				'prefer parallel support work rather than serializing them by default'
+			)
+		},
+		@{
+			Path = 'commands/gp-compound-refresh.md'
+			Needles = @(
+				'prefer parallel review work and combine the accepted conclusions only at the main-agent decision point'
+			)
+		}
+	)
+
+	$missing = @()
+	foreach ($check in $checks) {
+		$text = Get-FileText -Path (Join-Path $repoRoot $check.Path)
+		foreach ($needle in $check.Needles) {
+			if ($text -notmatch [regex]::Escape($needle)) {
+				$missing += "$($check.Path) missing $needle"
+			}
+		}
+	}
+
+	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
+}
+
 Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and durable' {
 	$checks = @(
 		@{
@@ -585,6 +667,7 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 				'03-plan.md',
 				'04-progress.md',
 				'05-review.md',
+				'Checklist coverage',
 				'06-handoff.md',
 				'corrected mistakes and their verified fixes',
 				'Corrected pitfalls from this task',
@@ -610,9 +693,17 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 			)
 		},
 		@{
+			Path = 'skills/gp-task-stage-discipline/references/task-stage-templates.md'
+			Needles = @(
+				'Checklist coverage:',
+				'Main-agent accepted review conclusion:'
+			)
+		},
+		@{
 			Path = 'docs/workflow/request-lifecycle.md'
 			Needles = @(
 				'docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/',
+				'checklist coverage',
 				'03-plan.md',
 				'04-progress.md',
 				'06-handoff.md'
@@ -691,7 +782,10 @@ Invoke-ToolkitCheck 'offline package excludes retired untracked runtime files' {
 				$zip.Entries |
 					ForEach-Object { $_.FullName.Replace('\', '/') }
 			)
+			Assert-Condition ($entryNames -contains 'agents/checklist-reviewer.md') 'packaged zip is missing agents/checklist-reviewer.md'
 			Assert-Condition ($entryNames -contains 'commands/gp-intake.md') 'packaged zip is missing commands/gp-intake.md'
+			Assert-Condition ($entryNames -contains 'skills/gp-review-checklist/SKILL.md') 'packaged zip is missing skills/gp-review-checklist/SKILL.md'
+			Assert-Condition ($entryNames -contains 'skills/gp-review-checklist/references/code-review-checklist.md') 'packaged zip is missing skills/gp-review-checklist/references/code-review-checklist.md'
 			Assert-Condition (-not ($entryNames -contains 'commands/intake.md')) 'packaged zip must not include stale commands/intake.md'
 			Assert-Condition (-not ($entryNames -contains 'commands/svn-handoff.md')) 'packaged zip must not include stale commands/svn-handoff.md'
 		} finally {
@@ -714,7 +808,7 @@ Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 		},
 		@{
 			Path = 'commands/gp-review.md'
-			Needles = @('gp-task-stage-discipline', 'cpp-reviewer', 'gameplay-reviewer', 'gp-experience-check', 'Relevant prior learnings', '05-review.md')
+			Needles = @('gp-task-stage-discipline', 'cpp-reviewer', 'gameplay-reviewer', 'checklist-reviewer', 'code-review-checklist.md', 'gp-experience-check', 'Relevant prior learnings', 'Checklist coverage', '05-review.md')
 		},
 		@{
 			Path = 'commands/gp-svn-handoff.md'
@@ -749,8 +843,10 @@ Invoke-ToolkitCheck 'gp-review does not call reviewer agents as skills' {
 
 	Assert-Condition ($text -match [regex]::Escape('agents/cpp-reviewer.md')) 'commands/gp-review.md must reference agents/cpp-reviewer.md'
 	Assert-Condition ($text -match [regex]::Escape('agents/gameplay-reviewer.md')) 'commands/gp-review.md must reference agents/gameplay-reviewer.md'
+	Assert-Condition ($text -match [regex]::Escape('agents/checklist-reviewer.md')) 'commands/gp-review.md must reference agents/checklist-reviewer.md'
 	Assert-Condition ($text -notmatch 'Run\s+`cpp-reviewer`') 'commands/gp-review.md must not invoke cpp-reviewer as a skill'
 	Assert-Condition ($text -notmatch 'Run\s+`gameplay-reviewer`') 'commands/gp-review.md must not invoke gameplay-reviewer as a skill'
+	Assert-Condition ($text -notmatch 'Run\s+`checklist-reviewer`') 'commands/gp-review.md must not invoke checklist-reviewer as a skill'
 }
 
 Invoke-ToolkitCheck 'specialist agents stay advisory under main-agent orchestration' {
@@ -766,6 +862,10 @@ Invoke-ToolkitCheck 'specialist agents stay advisory under main-agent orchestrat
 		@{
 			Path = 'agents/gameplay-reviewer.md'
 			Needles = @('candidate findings', 'draft summary for the main agent', 'Do not make the final gameplay ruling.')
+		},
+		@{
+			Path = 'agents/checklist-reviewer.md'
+			Needles = @('candidate findings', 'draft summary', 'Do not issue the final review ruling.')
 		},
 		@{
 			Path = 'agents/log-investigator.md'
@@ -829,6 +929,95 @@ Invoke-ToolkitCheck 'cpp reviewer preserves approved project norms' {
 	}
 
 	Assert-Condition ($hits.Count -eq 0) ($hits -join '; ')
+}
+
+Invoke-ToolkitCheck 'checklist review runtime stays explicit in runtime files' {
+	$checks = @(
+		@{
+			Path = 'agents/gameplay-main.md'
+			Needles = @('checklist-reviewer', 'code-review-checklist.md', 'Checklist coverage')
+		},
+		@{
+			Path = 'commands/gp-review.md'
+			Needles = @('checklist-reviewer', 'code-review-checklist.md', 'Checklist coverage')
+		},
+		@{
+			Path = 'skills/gp-review-checklist/SKILL.md'
+			Needles = @('This skill is mandatory support work inside `gp-review`.', 'Checklist coverage', '`2.1`', '`8.3`')
+		},
+		@{
+			Path = 'agents/checklist-reviewer.md'
+			Needles = @('Checklist Coverage', 'Do not issue the final review ruling.', 'skills/gp-review-checklist/references/code-review-checklist.md')
+		},
+		@{
+			Path = 'docs/operator/quickstart.md'
+			Needles = @('checklist review', 'Checklist coverage')
+		},
+		@{
+			Path = 'docs/workflow/request-lifecycle.md'
+			Needles = @('checklist review', 'checklist coverage')
+		}
+	)
+
+	$missing = @()
+	foreach ($check in $checks) {
+		$text = Get-FileText -Path (Join-Path $repoRoot $check.Path)
+		foreach ($needle in $check.Needles) {
+			if ($text -notmatch [regex]::Escape($needle)) {
+				$missing += "$($check.Path) missing $needle"
+			}
+		}
+	}
+
+	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
+}
+
+Invoke-ToolkitCheck 'review checklist reference keeps only 37 review items' {
+	$checklistPath = Join-Path $repoRoot 'skills/gp-review-checklist/references/code-review-checklist.md'
+	$text = Get-FileText -Path $checklistPath
+
+	Assert-Condition ((@(Get-Content -LiteralPath $checklistPath -TotalCount 1))[0] -ne '---') 'skills/gp-review-checklist/references/code-review-checklist.md must not keep source frontmatter'
+
+	$itemMatches = [regex]::Matches($text, '(?m)^\| \d+\.\d+ \|')
+	Assert-Condition ($itemMatches.Count -eq 37) "skills/gp-review-checklist/references/code-review-checklist.md must contain 37 checklist item rows, found $($itemMatches.Count)"
+
+	$sectionMatches = [regex]::Matches($text, '(?m)^## ')
+	Assert-Condition ($sectionMatches.Count -eq 8) "skills/gp-review-checklist/references/code-review-checklist.md must contain 8 checklist sections, found $($sectionMatches.Count)"
+
+	$requiredNeedles = @(
+		'| 1.1 | Code duplication issues |',
+		'| 2.1 | Allocation and release pairing |',
+		'| 4.1 | Hot-path interface performance |',
+		'| 6.4 | `KeepEffect` usage |',
+		'| 8.4 | `RoleManager` lookup |'
+	)
+
+	$missing = @()
+	foreach ($needle in $requiredNeedles) {
+		if ($text -notmatch [regex]::Escape($needle)) {
+			$missing += "skills/gp-review-checklist/references/code-review-checklist.md missing $needle"
+		}
+	}
+
+	$forbiddenPatterns = @(
+		'(?m)^page_type:',
+		'(?m)^title:',
+		'(?m)^source_refs:',
+		'(?m)^created_at:',
+		'(?m)^updated_at:',
+		'(?m)^## Priority',
+		'(?m)^## Usage',
+		'(?m)^## Source',
+		'(?m)^## Sources'
+	)
+
+	foreach ($pattern in $forbiddenPatterns) {
+		if ($text -match $pattern) {
+			$missing += "skills/gp-review-checklist/references/code-review-checklist.md must not match $pattern"
+		}
+	}
+
+	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
 }
 
 Invoke-ToolkitCheck 'router fixtures stay in context-card structure' {

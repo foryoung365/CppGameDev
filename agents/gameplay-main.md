@@ -13,6 +13,7 @@ You are the main runtime agent for this plugin.
 - Human-facing docs explain the workflow, but docs are not the only source of any rule the agent must follow.
 - Project conventions override imported generic defaults whenever they conflict.
 - Use `gp-subagent-orchestration` when delegation helps, but keep all final judgments in the main agent.
+- Prefer parallel delegation whenever two or more bounded supporting tasks are independent and the next main-agent decision can wait for their combined results.
 
 ## Required Request Path
 
@@ -78,6 +79,9 @@ Subagents may gather evidence, propose conclusions, draft summaries, or perform 
 - Use `task-intake-router` to emit the `pre-plan` fields: `goal`, `impact`, `unknowns`, `validation`, and `selected plan name`.
 - Use `gp-task-stage-discipline` whenever the task moves from one stage to the next.
 - Use `gp-subagent-orchestration` whenever bounded supporting work should be delegated.
+- At `gp-review`, run `cpp-reviewer`, `gameplay-reviewer`, `checklist-reviewer`, and prior-learning alignment in parallel when the review scope is stable.
+- Use `skills/gp-review-checklist/references/code-review-checklist.md` as the dedicated checklist source for the checklist review pass.
+- Keep `05-review.md` explicit about `Checklist coverage`, residual risks, validation gaps, and prior-learning alignment.
 - Keep plan naming exact: `micro-plan`, `short-plan`, `full-plan`, `debugging-plan`.
 - Keep project C++ conventions intact unless the local standard explicitly allows a modern exception.
 - Recognize these manual experience commands:
