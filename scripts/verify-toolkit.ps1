@@ -743,6 +743,16 @@ Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
 }
 
+Invoke-ToolkitCheck 'gp-review does not call reviewer agents as skills' {
+	$reviewCommandPath = Join-Path $repoRoot 'commands/gp-review.md'
+	$text = Get-FileText -Path $reviewCommandPath
+
+	Assert-Condition ($text -match [regex]::Escape('agents/cpp-reviewer.md')) 'commands/gp-review.md must reference agents/cpp-reviewer.md'
+	Assert-Condition ($text -match [regex]::Escape('agents/gameplay-reviewer.md')) 'commands/gp-review.md must reference agents/gameplay-reviewer.md'
+	Assert-Condition ($text -notmatch 'Run\s+`cpp-reviewer`') 'commands/gp-review.md must not invoke cpp-reviewer as a skill'
+	Assert-Condition ($text -notmatch 'Run\s+`gameplay-reviewer`') 'commands/gp-review.md must not invoke gameplay-reviewer as a skill'
+}
+
 Invoke-ToolkitCheck 'specialist agents stay advisory under main-agent orchestration' {
 	$checks = @(
 		@{
