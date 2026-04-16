@@ -120,15 +120,15 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 		'skills\gp-compound\references\experience-schema.md',
 		'skills\gp-compound-refresh\SKILL.md',
 		'skills\gp-compound-refresh\references\refresh-rules.md',
-		'skills\gp-experience-check\SKILL.md',
+		'skills\gp-experience-researcher\SKILL.md',
 		'skills\gp-review-checklist\SKILL.md',
 		'skills\gp-review-checklist\references\code-review-checklist.md',
 		'skills\gp-subagent-orchestration\SKILL.md',
 		'skills\gp-subagent-orchestration\references\delegation-matrix.md',
 		'skills\gp-task-stage-discipline\SKILL.md',
 		'skills\gp-task-stage-discipline\references\task-stage-templates.md',
+		'agents\gp-experience-researcher.md',
 		'agents\checklist-reviewer.md',
-		'agents\gameplay-learnings-researcher.md',
 		'commands\gp-compound.md',
 		'commands\gp-compound-refresh.md',
 		'tests\fixtures\experience\host-project\docs\cpp-mmorpg-gameplay\solutions\bugs\combat\buff-remove-ordering-2026-03-30.md',
@@ -432,7 +432,7 @@ Invoke-ToolkitCheck 'experience runtime contract stays host-project scoped and e
 			)
 		},
 		@{
-			Path = 'skills/gp-experience-check/SKILL.md'
+			Path = 'skills/gp-experience-researcher/SKILL.md'
 			Needles = @(
 				'Historical experience never outranks:',
 				'Search the host project''s experience library, not the plugin repository.',
@@ -764,6 +764,8 @@ Invoke-ToolkitCheck 'offline package excludes retired untracked runtime files' {
 
 		$staleCommand = Join-Path $packageRepo 'commands\intake.md'
 		[System.IO.File]::WriteAllText($staleCommand, "# stale command`n")
+		$scratchCommand = Join-Path $packageRepo 'commands\scratch-not-for-release.md'
+		[System.IO.File]::WriteAllText($scratchCommand, "# scratch command`n")
 
 		$packageScript = Join-Path $packageRepo 'scripts\package-plugin.bat'
 		& $packageScript | Out-Null
@@ -782,11 +784,14 @@ Invoke-ToolkitCheck 'offline package excludes retired untracked runtime files' {
 				$zip.Entries |
 					ForEach-Object { $_.FullName.Replace('\', '/') }
 			)
+			Assert-Condition ($entryNames -contains 'agents/gp-experience-researcher.md') 'packaged zip is missing agents/gp-experience-researcher.md'
 			Assert-Condition ($entryNames -contains 'agents/checklist-reviewer.md') 'packaged zip is missing agents/checklist-reviewer.md'
 			Assert-Condition ($entryNames -contains 'commands/gp-intake.md') 'packaged zip is missing commands/gp-intake.md'
+			Assert-Condition ($entryNames -contains 'skills/gp-experience-researcher/SKILL.md') 'packaged zip is missing skills/gp-experience-researcher/SKILL.md'
 			Assert-Condition ($entryNames -contains 'skills/gp-review-checklist/SKILL.md') 'packaged zip is missing skills/gp-review-checklist/SKILL.md'
 			Assert-Condition ($entryNames -contains 'skills/gp-review-checklist/references/code-review-checklist.md') 'packaged zip is missing skills/gp-review-checklist/references/code-review-checklist.md'
 			Assert-Condition (-not ($entryNames -contains 'commands/intake.md')) 'packaged zip must not include stale commands/intake.md'
+			Assert-Condition (-not ($entryNames -contains 'commands/scratch-not-for-release.md')) 'packaged zip must not include commands/scratch-not-for-release.md'
 			Assert-Condition (-not ($entryNames -contains 'commands/svn-handoff.md')) 'packaged zip must not include stale commands/svn-handoff.md'
 		} finally {
 			$zip.Dispose()
@@ -796,23 +801,60 @@ Invoke-ToolkitCheck 'offline package excludes retired untracked runtime files' {
 	}
 }
 
+Invoke-ToolkitCheck 'offline package fails when a tracked runtime source is missing' {
+	$tempRoot = Join-Path ([System.IO.Path]::GetTempPath()) ('cppgamedev-package-missing-' + [guid]::NewGuid().ToString('N'))
+	$packageRepo = Join-Path $tempRoot 'repo'
+
+	try {
+		New-Item -ItemType Directory -Force -Path $tempRoot | Out-Null
+
+		$copyPaths = @(
+			'.git',
+			'.claude-plugin',
+			'agents',
+			'commands',
+			'skills',
+			'docs',
+			'scripts',
+			'README.md',
+			'settings.json'
+		)
+
+		foreach ($relativePath in $copyPaths) {
+			$source = Join-Path $repoRoot $relativePath
+			$destination = Join-Path $packageRepo $relativePath
+			$parent = Split-Path -Path $destination -Parent
+			New-Item -ItemType Directory -Force -Path $parent | Out-Null
+			Copy-Item -LiteralPath $source -Destination $destination -Recurse -Force
+		}
+
+		Remove-Item -LiteralPath (Join-Path $packageRepo 'commands\gp-review.md') -Force
+
+		$packageScript = Join-Path $packageRepo 'scripts\package-plugin.bat'
+		& $packageScript | Out-Null
+		Assert-Condition ($LASTEXITCODE -ne 0) 'package-plugin.bat should fail when a tracked runtime source is missing'
+	} finally {
+		Remove-DirectoryIfPresent -Path $tempRoot
+	}
+}
+
 Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 	$commandChecks = @(
 		@{
 			Path = 'commands/gp-intake.md'
-			Needles = @('gp-task-stage-discipline', 'gameplay-context-guard', 'task-intake-router', '00-context.md', '01-pre-plan.md', 'pre-plan', 'gp-experience-check', 'Experience summary')
+			Needles = @('gp-task-stage-discipline', 'gameplay-context-guard', 'task-intake-router', '00-context.md', '01-pre-plan.md', 'pre-plan', 'gp-experience-researcher', 'Experience summary')
 		},
 		@{
 			Path = 'commands/gp-debug.md'
-			Needles = @('gp-task-stage-discipline', 'gameplay-context-guard', 'task-intake-router', 'debugging-plan', 'systematic-debugging', 'gp-experience-check', 'candidate leads, not proof', '02-debug.md', '03-plan.md')
+			Needles = @('gp-task-stage-discipline', 'gameplay-context-guard', 'task-intake-router', 'debugging-plan', 'systematic-debugging', 'gp-experience-researcher', 'candidate leads, not proof', '02-debug.md', '03-plan.md')
 		},
 		@{
 			Path = 'commands/gp-review.md'
-			Needles = @('gp-task-stage-discipline', 'cpp-reviewer', 'gameplay-reviewer', 'checklist-reviewer', 'code-review-checklist.md', 'gp-experience-check', 'Relevant prior learnings', 'Checklist coverage', '05-review.md')
+			Needles = @('gp-task-stage-discipline', 'cpp-reviewer', 'gameplay-reviewer', 'checklist-reviewer', 'code-review-checklist.md', 'gp-experience-researcher', 'Relevant prior learnings', 'Checklist coverage', '05-review.md')
 		},
 		@{
 			Path = 'commands/gp-svn-handoff.md'
-			Needles = @('gp-task-stage-discipline', 'svn-workspace-discipline', 'svn-delivery-handoff', 'fresh successful compile', 'gp-experience-check', 'merits `gp-compound`', '06-handoff.md', 'corrected pitfalls', 'transferable lesson candidates')
+			Needles = @('gp-task-stage-discipline', 'svn-workspace-discipline', 'svn-delivery-handoff', 'fresh successful compile', 'gp-experience-researcher', 'merits `gp-compound`', '06-handoff.md', 'corrected pitfalls', 'transferable lesson candidates')
 		},
 		@{
 			Path = 'commands/gp-compound.md'
@@ -852,7 +894,7 @@ Invoke-ToolkitCheck 'gp-review does not call reviewer agents as skills' {
 Invoke-ToolkitCheck 'specialist agents stay advisory under main-agent orchestration' {
 	$checks = @(
 		@{
-			Path = 'agents/gameplay-learnings-researcher.md'
+			Path = 'agents/gp-experience-researcher.md'
 			Needles = @('candidate connections', 'draft summary for the main agent', 'Do not make a final ruling.')
 		},
 		@{

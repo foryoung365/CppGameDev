@@ -8,7 +8,7 @@ This file records which upstream ideas influenced this plugin and which project-
 | `agents/cpp-reviewer.md` | merged C++ standard | aligned reviewer | Project-aware C++ reviewer that preserves local naming, formatting, and ownership culture while still blocking real defects |
 | `agents/gameplay-main.md` | local toolkit governance | runtime authority | Main runtime entry point replacing root governance files |
 | `skills/gp-compound/SKILL.md` | CE compound concept | adapted, host-project-first | Keeps the compound idea but writes to host-project docs instead of the plugin repository and rejects speculative learnings |
-| `agents/gameplay-learnings-researcher.md` | CE learnings retrieval concept | adapted, evidence-first | Retrieves verified host-project learnings as secondary context only |
+| `agents/gp-experience-researcher.md` | CE learnings retrieval concept | adapted, evidence-first | Retrieves verified host-project learnings as secondary context only |
 | `docs/operator/quickstart.md` | local operator docs | published human doc | Human quickstart for loading the plugin and using namespaced commands |
 
 ## Resolution Rule

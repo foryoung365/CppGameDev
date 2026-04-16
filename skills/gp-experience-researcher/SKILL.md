@@ -1,9 +1,9 @@
 ---
-name: gp-experience-check
+name: gp-experience-researcher
 description: Use when gameplay work should search the host project's verified experience library and return a concise relevance summary.
 ---
 
-# GP Experience Check
+# GP Experience Researcher
 
 Use this skill to pull verified prior learnings into the current task as **secondary context**.
 
@@ -108,4 +108,4 @@ This skill is used at:
 - `gp-svn-handoff`
 
 It informs the current task, but it does not make the final decision for the current task.
-Main-agent rule: experience-check output is secondary context only; any accepted conclusion must be written into the active stage document by the main agent.
+Main-agent rule: experience-researcher output is secondary context only; any accepted conclusion must be written into the active stage document by the main agent.

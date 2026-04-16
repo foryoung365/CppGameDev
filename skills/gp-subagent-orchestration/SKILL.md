@@ -89,7 +89,7 @@ Do not let a subagent:
 
 Use existing specialist agents as worker roles:
 
-- `gameplay-learnings-researcher`
+- `gp-experience-researcher`
 - `cpp-reviewer`
 - `gameplay-reviewer`
 - `log-investigator`

@@ -7,7 +7,7 @@ Route the current request through the plugin intake path.
 3. Write the context card to `<task-dir>/00-context.md`, including delegated support if any and the `main-agent accepted context summary` that records which context facts the main agent accepts before routing proceeds.
 4. Pass the completed and main-agent-accepted context card to `task-intake-router`.
 5. Emit the router's `pre-plan` output with `goal`, `impact`, `unknowns`, `validation`, and `selected plan name`.
-6. Run `gp-experience-check` after `pre-plan` and attach the `Experience summary` as secondary context only; prior learnings can suggest leads, but they do not advance the stage or replace router judgment.
+6. Run the `gp-experience-researcher` agent after `pre-plan`, and attach the `Experience summary` as secondary context only; prior learnings can suggest leads, but they do not advance the stage or replace router judgment.
 7. Treat the main agent as the only decision-maker for whether intake is complete enough to move forward, and treat any subagent output as candidate evidence that still needs acceptance.
 8. Write the routed result, plus the main agent's accepted conclusion, to `<task-dir>/01-pre-plan.md`.
 9. Continue with the selected plan-specific flow only after the main agent accepts the router output and the router chooses `micro-plan`, `short-plan`, `full-plan`, or `debugging-plan`.

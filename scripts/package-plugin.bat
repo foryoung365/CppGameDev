@@ -33,26 +33,38 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue;" ^
 	"Remove-Item -LiteralPath $zip -Force -ErrorAction SilentlyContinue;" ^
 	"New-Item -ItemType Directory -Force -Path $stage | Out-Null;" ^
-	"$trackedFiles = @(& git -C $repo ls-files --cached -- $packageRoots);" ^
+	"$retiredFiles = @(" ^
+	"  'agents/gameplay-learnings-researcher.md'," ^
+	"  'commands/intake.md'," ^
+	"  'commands/svn-handoff.md'," ^
+	"  'skills/gp-experience-check/SKILL.md'" ^
+	");" ^
+	"$allowedUntrackedFiles = @(" ^
+	"  'agents/gp-experience-researcher.md'," ^
+	"  'skills/gp-experience-researcher/SKILL.md'" ^
+	");" ^
+	"$trackedPackageFiles = @(& git -C $repo ls-files --cached -- $packageRoots);" ^
 	"if ($LASTEXITCODE -ne 0) { throw 'Failed to enumerate tracked package files' };" ^
-	"if ($trackedFiles.Count -eq 0) { throw 'No tracked package files were resolved' };" ^
-	"foreach ($relative in $trackedFiles) {" ^
+	"$packageFiles = @($trackedPackageFiles + $allowedUntrackedFiles);" ^
+	"$packageFiles = @($packageFiles | Where-Object { $_ -and $retiredFiles -notcontains $_ } | Sort-Object -Unique);" ^
+	"if ($packageFiles.Count -eq 0) { throw 'No package files were resolved' };" ^
+	"foreach ($relative in $packageFiles) {" ^
 	"  $relativePath = $relative.Replace('/', '\');" ^
 	"  $source = Join-Path $repo $relativePath;" ^
-	"  if (-not (Test-Path -LiteralPath $source)) { throw 'Missing tracked source path: ' + $source };" ^
+	"  if (-not (Test-Path -LiteralPath $source)) { throw 'Missing package source path: ' + $source };" ^
 	"  $destination = Join-Path $stage $relativePath;" ^
 	"  $parent = Split-Path -Path $destination -Parent;" ^
 	"  New-Item -ItemType Directory -Force -Path $parent | Out-Null;" ^
 	"  Copy-Item -LiteralPath $source -Destination $destination -Force;" ^
 	"}" ^
 	"$expected = @(" ^
+	"  'agents\gp-experience-researcher.md'," ^
 	"  'agents\checklist-reviewer.md'," ^
-	"  'agents\gameplay-learnings-researcher.md'," ^
 	"  'commands\gp-compound.md'," ^
 	"  'commands\gp-compound-refresh.md'," ^
 	"  'skills\gp-compound\SKILL.md'," ^
 	"  'skills\gp-compound-refresh\SKILL.md'," ^
-	"  'skills\gp-experience-check\SKILL.md'," ^
+	"  'skills\gp-experience-researcher\SKILL.md'," ^
 	"  'skills\gp-review-checklist\SKILL.md'," ^
 	"  'skills\gp-review-checklist\references\code-review-checklist.md'," ^
 	"  'skills\gp-subagent-orchestration\SKILL.md'," ^
