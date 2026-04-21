@@ -13,8 +13,8 @@ This skill works on the host project's experience library root:
 
 1. Use the explicit override from the active host project's `claude.md` when present.
 2. Otherwise use:
-   - `docs/cpp-mmorpg-gameplay/solutions/bugs/`
-   - `docs/cpp-mmorpg-gameplay/solutions/patterns/`
+   - `docs/cmg/solutions/bugs/`
+   - `docs/cmg/solutions/patterns/`
 
 If the host project has no experience library yet, report that and stop cleanly.
 

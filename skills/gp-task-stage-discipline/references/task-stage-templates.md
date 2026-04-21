@@ -5,7 +5,7 @@ Use these as compact templates inside the host project task directory.
 Task directory shape:
 
 ```text
-docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/
+docs/cmg/tasks/YYYY-MM-DD-<task-slug>/
 ```
 
 ## `00-context.md`

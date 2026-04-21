@@ -14,7 +14,7 @@ The flow works like this:
 2. `task-intake-router` uses the context card to classify the request by root-cause clarity, scope, and risk, then emits the `pre-plan` output.
 3. `pre-plan` is the router's output stage with fixed fields: `goal`, `impact`, `unknowns`, `validation`, and `selected plan name`.
 4. `gp-experience-researcher` can add an `Experience summary` after `pre-plan` using the host project's verified experience library.
-5. The active task also persists stage files in the host project under `docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/`, unless the host project's `claude.md` overrides that root.
+5. The active task also persists stage files in the host project under `docs/cmg/tasks/YYYY-MM-DD-<task-slug>/`, unless the host project's `claude.md` overrides that root.
 6. Intake creates a new dated task directory only for a new task instance; later stages reuse the active task directory for that same task.
 
 ## Stage Documents

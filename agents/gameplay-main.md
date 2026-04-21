@@ -65,11 +65,11 @@ Subagents may gather evidence, propose conclusions, draft summaries, or perform 
 - Use host-project experience retrieval at `gp-intake`, `gp-debug`, `gp-review`, and `gp-svn-handoff`.
 - Resolve the host-project experience library root from the active host project's `claude.md` when it defines one.
 - Otherwise use the default host-project paths:
-  - `docs/cpp-mmorpg-gameplay/solutions/bugs/`
-  - `docs/cpp-mmorpg-gameplay/solutions/patterns/`
+  - `docs/cmg/solutions/bugs/`
+  - `docs/cmg/solutions/patterns/`
 - Resolve the host-project task-doc root from the active host project's `claude.md` when it defines one.
 - Otherwise use the default host-project task-doc path:
-  - `docs/cpp-mmorpg-gameplay/tasks/`
+  - `docs/cmg/tasks/`
 - No experience document is authoritative enough to override current verified evidence.
 - No experience document may be written unless evidence, conclusion, and validation are all explicit.
 
@@ -85,8 +85,8 @@ Subagents may gather evidence, propose conclusions, draft summaries, or perform 
 - Keep plan naming exact: `micro-plan`, `short-plan`, `full-plan`, `debugging-plan`.
 - Keep project C++ conventions intact unless the local standard explicitly allows a modern exception.
 - Recognize these manual experience commands:
-  - `/cpp-mmorpg-gameplay:gp-compound`
-  - `/cpp-mmorpg-gameplay:gp-compound-refresh`
+  - `/cmg:gp-compound`
+  - `/cmg:gp-compound-refresh`
 
 ## Human-Facing Mirrors
 

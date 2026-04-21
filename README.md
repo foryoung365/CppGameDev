@@ -35,12 +35,12 @@ Internal maintainer provenance lives here:
 
 Use the plugin namespace:
 
-- `/cpp-mmorpg-gameplay:gp-intake`
-- `/cpp-mmorpg-gameplay:gp-debug`
-- `/cpp-mmorpg-gameplay:gp-review`
-- `/cpp-mmorpg-gameplay:gp-svn-handoff`
-- `/cpp-mmorpg-gameplay:gp-compound`
-- `/cpp-mmorpg-gameplay:gp-compound-refresh`
+- `/cmg:gp-intake`
+- `/cmg:gp-debug`
+- `/cmg:gp-review`
+- `/cmg:gp-svn-handoff`
+- `/cmg:gp-compound`
+- `/cmg:gp-compound-refresh`
 
 ## Marketplace
 
@@ -50,14 +50,14 @@ Offline local marketplace add:
 
 ```text
 /plugin marketplace add I:\CppGameDev
-/plugin install cpp-mmorpg-gameplay@foryoung365-plugins
+/plugin install cmg@foryoung365-plugins
 ```
 
 GitHub marketplace add:
 
 ```text
 /plugin marketplace add foryoung365/CppGameDev-skill
-/plugin install cpp-mmorpg-gameplay@foryoung365-plugins
+/plugin install cmg@foryoung365-plugins
 ```
 
 The marketplace catalog now uses a relative plugin source, so the same catalog works both from a local filesystem path and from the GitHub repository clone that Claude Code creates when you add the marketplace by repo name.
@@ -106,7 +106,7 @@ Internal maintainer docs:
 - Project conventions override imported ECC defaults when they conflict.
 - The runtime request path is `request -> gameplay-context-guard -> task-intake-router -> pre-plan`.
 - The workflow is main-agent orchestrated: subagents may do bounded support work, but the main agent alone decides stage transitions, root cause acceptance, plan approval, review conclusions, handoff readiness, and experience-library promotion.
-- Every stage transition must persist to host-project task docs under `docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/`, unless the host project's `claude.md` overrides that root.
+- Every stage transition must persist to host-project task docs under `docs/cmg/tasks/YYYY-MM-DD-<task-slug>/`, unless the host project's `claude.md` overrides that root.
 - `03-plan.md` is mandatory before code edits, `04-progress.md` must stay current during execution, and `06-handoff.md` cannot claim readiness without fresh compile evidence for code-changing work.
 - SVN delivery is feature-sized.
 - SVN commits are allowed only at one complete feature or one complete fix granularity.
@@ -114,7 +114,7 @@ Internal maintainer docs:
 - The plugin does not define project-specific build commands; compile proof should use the host project's standard build script or build command from that project's `claude.md` or equivalent local runtime config.
 - The plugin supports host-project experience retrieval and experience authoring.
 - Experience lives in the host project, not in this plugin repository.
-- The default host-project experience paths are `docs/cpp-mmorpg-gameplay/solutions/bugs/` and `docs/cpp-mmorpg-gameplay/solutions/patterns/`.
+- The default host-project experience paths are `docs/cmg/solutions/bugs/` and `docs/cmg/solutions/patterns/`.
 - The active host project's `claude.md` can override the experience root explicitly.
 - Historical experience is secondary context only; current code, current evidence, and current validation stay authoritative.
 - Published docs are human-facing only; runtime authority stays in plugin assets.

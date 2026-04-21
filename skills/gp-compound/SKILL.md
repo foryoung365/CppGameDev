@@ -18,8 +18,8 @@ Resolve the library root in this order:
 
 1. If the active host project's `claude.md` explicitly defines an experience library root, use that path.
 2. Otherwise use the default host-project root:
-   - `docs/cpp-mmorpg-gameplay/solutions/bugs/`
-   - `docs/cpp-mmorpg-gameplay/solutions/patterns/`
+   - `docs/cmg/solutions/bugs/`
+   - `docs/cmg/solutions/patterns/`
 
 Create missing directories lazily on first write. Do not pre-create empty library trees.
 

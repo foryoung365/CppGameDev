@@ -81,7 +81,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"  'docs\upstream-mapping.md'," ^
 	"  'tests'," ^
 	"  '.tmp'," ^
-	"  'docs\cpp-mmorpg-gameplay'," ^
+	"  'docs\cmg'," ^
 	"  'docs\solutions'" ^
 	");" ^
 	"foreach ($relative in $forbidden) {" ^

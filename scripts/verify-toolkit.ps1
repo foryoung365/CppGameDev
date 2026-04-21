@@ -131,8 +131,8 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 		'agents\checklist-reviewer.md',
 		'commands\gp-compound.md',
 		'commands\gp-compound-refresh.md',
-		'tests\fixtures\experience\host-project\docs\cpp-mmorpg-gameplay\solutions\bugs\combat\buff-remove-ordering-2026-03-30.md',
-		'tests\fixtures\experience\host-project\docs\cpp-mmorpg-gameplay\solutions\patterns\workflow\evidence-before-compound-2026-03-30.md'
+		'tests\fixtures\experience\host-project\docs\cmg\solutions\bugs\combat\buff-remove-ordering-2026-03-30.md',
+		'tests\fixtures\experience\host-project\docs\cmg\solutions\patterns\workflow\evidence-before-compound-2026-03-30.md'
 	)
 
 	$missing = @()
@@ -162,7 +162,7 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 	Assert-Condition ($hits.Count -eq 0) ('Retired paths must not exist: ' + ($hits -join ', '))
 
 	$plugin = Get-Content -Raw -LiteralPath (Join-Path $repoRoot '.claude-plugin\plugin.json') | ConvertFrom-Json
-	Assert-Condition ($plugin.name -eq 'cpp-mmorpg-gameplay') 'plugin.json name must be cpp-mmorpg-gameplay'
+	Assert-Condition ($plugin.name -eq 'cmg') 'plugin.json name must be cmg'
 	Assert-Condition (-not [string]::IsNullOrWhiteSpace($plugin.description)) 'plugin.json description is required'
 	Assert-Condition (-not [string]::IsNullOrWhiteSpace($plugin.version)) 'plugin.json version is required'
 	Assert-Condition (-not [string]::IsNullOrWhiteSpace($plugin.homepage)) 'plugin.json homepage is required'
@@ -171,8 +171,8 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 	$marketplace = Get-Content -Raw -LiteralPath (Join-Path $repoRoot '.claude-plugin\marketplace.json') | ConvertFrom-Json
 	Assert-Condition ($marketplace.name -eq 'foryoung365-plugins') 'marketplace.json name must be foryoung365-plugins'
 	Assert-Condition ($marketplace.plugins.Count -gt 0) 'marketplace.json must include at least one plugin entry'
-	$pluginEntry = @($marketplace.plugins | Where-Object name -eq 'cpp-mmorpg-gameplay')
-	Assert-Condition ($pluginEntry.Count -eq 1) 'marketplace.json must include exactly one cpp-mmorpg-gameplay entry'
+	$pluginEntry = @($marketplace.plugins | Where-Object name -eq 'cmg')
+	Assert-Condition ($pluginEntry.Count -eq 1) 'marketplace.json must include exactly one cmg entry'
 	Assert-Condition ($pluginEntry[0].source -eq './') 'marketplace plugin entry must use relative source ./'
 	Assert-Condition ($marketplace.metadata.version -eq $plugin.version) 'marketplace metadata version must match plugin.json version'
 	Assert-Condition ($pluginEntry[0].version -eq $plugin.version) 'marketplace plugin entry version must match plugin.json version'
@@ -427,8 +427,8 @@ Invoke-ToolkitCheck 'experience runtime contract stays host-project scoped and e
 			Needles = @(
 				'Historical experience is secondary context only.',
 				'Current code, current logs, current reproduction evidence, and current validation outrank historical experience.',
-				'docs/cpp-mmorpg-gameplay/solutions/bugs/',
-				'docs/cpp-mmorpg-gameplay/solutions/patterns/'
+				'docs/cmg/solutions/bugs/',
+				'docs/cmg/solutions/patterns/'
 			)
 		},
 		@{
@@ -436,8 +436,8 @@ Invoke-ToolkitCheck 'experience runtime contract stays host-project scoped and e
 			Needles = @(
 				'Historical experience never outranks:',
 				'Search the host project''s experience library, not the plugin repository.',
-				'docs/cpp-mmorpg-gameplay/solutions/bugs/',
-				'docs/cpp-mmorpg-gameplay/solutions/patterns/'
+				'docs/cmg/solutions/bugs/',
+				'docs/cmg/solutions/patterns/'
 			)
 		},
 		@{
@@ -648,7 +648,7 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 		@{
 			Path = 'agents/gameplay-main.md'
 			Needles = @(
-				'docs/cpp-mmorpg-gameplay/tasks/',
+				'docs/cmg/tasks/',
 				'03-plan.md',
 				'04-progress.md',
 				'06-handoff.md'
@@ -657,7 +657,7 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 		@{
 			Path = 'skills/gp-task-stage-discipline/SKILL.md'
 			Needles = @(
-				'docs/cpp-mmorpg-gameplay/tasks/',
+				'docs/cmg/tasks/',
 				'YYYY-MM-DD-<task-slug>',
 				'Create a new dated task directory when intake is starting a new task instance.',
 				'Reuse the active task directory when later stages are continuing the same task.',
@@ -702,7 +702,7 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 		@{
 			Path = 'docs/workflow/request-lifecycle.md'
 			Needles = @(
-				'docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/',
+				'docs/cmg/tasks/YYYY-MM-DD-<task-slug>/',
 				'checklist coverage',
 				'03-plan.md',
 				'04-progress.md',
@@ -712,7 +712,7 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 		@{
 			Path = 'README.md'
 			Needles = @(
-				'docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/',
+				'docs/cmg/tasks/YYYY-MM-DD-<task-slug>/',
 				'03-plan.md',
 				'04-progress.md',
 				'06-handoff.md'
@@ -933,12 +933,12 @@ Invoke-ToolkitCheck 'specialist agents stay advisory under main-agent orchestrat
 }
 
 Invoke-ToolkitCheck 'experience fixtures stay in host-project-shaped test paths only' {
-	$rootExperiencePath = Join-Path $repoRoot 'docs\cpp-mmorpg-gameplay'
+	$rootExperiencePath = Join-Path $repoRoot 'docs\cmg'
 	Assert-Condition (-not (Test-Path -LiteralPath $rootExperiencePath)) 'Plugin root must not contain runtime host-project experience docs'
 
 	$fixtureFiles = @(
-		'tests/fixtures/experience/host-project/docs/cpp-mmorpg-gameplay/solutions/bugs/combat/buff-remove-ordering-2026-03-30.md',
-		'tests/fixtures/experience/host-project/docs/cpp-mmorpg-gameplay/solutions/patterns/workflow/evidence-before-compound-2026-03-30.md'
+		'tests/fixtures/experience/host-project/docs/cmg/solutions/bugs/combat/buff-remove-ordering-2026-03-30.md',
+		'tests/fixtures/experience/host-project/docs/cmg/solutions/patterns/workflow/evidence-before-compound-2026-03-30.md'
 	)
 
 	$missing = @()
@@ -1173,7 +1173,7 @@ Invoke-ToolkitCheck 'claude CLI smoke precheck is documented or manually pending
 	$readmeText = Get-FileText -Path (Join-Path $repoRoot 'README.md')
 	Assert-Condition ($readmeText -match [regex]::Escape('claude --plugin-dir I:\CppGameDev')) 'README.md missing plugin smoke-test command'
 Assert-Condition ($readmeText -match [regex]::Escape('/plugin marketplace add foryoung365/CppGameDev-skill')) 'README.md missing marketplace add command'
-	Assert-Condition ($readmeText -match [regex]::Escape('/plugin install cpp-mmorpg-gameplay@foryoung365-plugins')) 'README.md missing marketplace install command'
+	Assert-Condition ($readmeText -match [regex]::Escape('/plugin install cmg@foryoung365-plugins')) 'README.md missing marketplace install command'
 
 	$claude = Get-Command claude -ErrorAction SilentlyContinue
 	if ($null -ne $claude) {

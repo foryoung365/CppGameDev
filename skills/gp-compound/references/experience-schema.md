@@ -13,8 +13,8 @@ This is the canonical contract for gameplay experience documents written by `gp-
 
 Default host-project roots:
 
-- `docs/cpp-mmorpg-gameplay/solutions/bugs/`
-- `docs/cpp-mmorpg-gameplay/solutions/patterns/`
+- `docs/cmg/solutions/bugs/`
+- `docs/cmg/solutions/patterns/`
 
 The active host project's `claude.md` may override this root explicitly.
 

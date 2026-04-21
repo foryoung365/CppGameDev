@@ -27,8 +27,8 @@ Resolve the library root in this order:
 
 1. explicit root from the active host project's `claude.md`
 2. default namespaced root:
-   - `docs/cpp-mmorpg-gameplay/solutions/bugs/`
-   - `docs/cpp-mmorpg-gameplay/solutions/patterns/`
+   - `docs/cmg/solutions/bugs/`
+   - `docs/cmg/solutions/patterns/`
 
 If neither path exists, return `No relevant learnings found` and note that the host project has no experience library yet.
 

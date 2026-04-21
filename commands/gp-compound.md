@@ -5,7 +5,7 @@ Use this command to write a verified gameplay experience document into the activ
 1. Load `gp-compound`.
 2. Resolve the host-project experience library root:
    - explicit root from the active host project's `claude.md`, if present
-   - otherwise `docs/cpp-mmorpg-gameplay/solutions/bugs/` and `docs/cpp-mmorpg-gameplay/solutions/patterns/`
+   - otherwise `docs/cmg/solutions/bugs/` and `docs/cmg/solutions/patterns/`
 3. Refuse to write anything unless evidence, conclusion, and validation are all explicit.
 4. Choose exactly one track:
    - `Bug track`

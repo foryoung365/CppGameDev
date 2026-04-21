@@ -16,24 +16,24 @@ If you want to consume it through the marketplace flow instead of `--plugin-dir`
 
 ```text
 /plugin marketplace add I:\CppGameDev
-/plugin install cpp-mmorpg-gameplay@foryoung365-plugins
+/plugin install cmg@foryoung365-plugins
 ```
 
 Or, if you want Claude Code to fetch the marketplace from GitHub:
 
 ```text
 /plugin marketplace add foryoung365/CppGameDev-skill
-/plugin install cpp-mmorpg-gameplay@foryoung365-plugins
+/plugin install cmg@foryoung365-plugins
 ```
 
 ## Start With These Commands
 
-- `/cpp-mmorpg-gameplay:gp-intake`
-- `/cpp-mmorpg-gameplay:gp-debug`
-- `/cpp-mmorpg-gameplay:gp-review`
-- `/cpp-mmorpg-gameplay:gp-svn-handoff`
-- `/cpp-mmorpg-gameplay:gp-compound`
-- `/cpp-mmorpg-gameplay:gp-compound-refresh`
+- `/cmg:gp-intake`
+- `/cmg:gp-debug`
+- `/cmg:gp-review`
+- `/cmg:gp-svn-handoff`
+- `/cmg:gp-compound`
+- `/cmg:gp-compound-refresh`
 
 ## Main-Agent Orchestrated Model
 
@@ -69,11 +69,11 @@ This plugin now treats task-stage documents as required runtime anchors for larg
 
 Default host-project task-doc root:
 
-- `docs/cpp-mmorpg-gameplay/tasks/`
+- `docs/cmg/tasks/`
 
 Each task lives under:
 
-- `docs/cpp-mmorpg-gameplay/tasks/YYYY-MM-DD-<task-slug>/`
+- `docs/cmg/tasks/YYYY-MM-DD-<task-slug>/`
 
 Create a new dated directory when intake starts a new task instance.
 Reuse the active task directory when later stages continue that same task.
@@ -99,8 +99,8 @@ This plugin can retrieve and write verified gameplay experience docs, but the li
 
 Default host-project locations:
 
-- `docs/cpp-mmorpg-gameplay/solutions/bugs/`
-- `docs/cpp-mmorpg-gameplay/solutions/patterns/`
+- `docs/cmg/solutions/bugs/`
+- `docs/cmg/solutions/patterns/`
 
 If the active host project's `claude.md` defines a different experience root, that override wins.
 
@@ -114,7 +114,7 @@ To create a local offline release zip, run from the repository root:
 scripts\package-plugin.bat
 ```
 
-The package is written to `dist\cpp-mmorpg-gameplay-<version>.zip`.
+The package is written to `dist\cmg-<version>.zip`.
 It contains plugin runtime assets only, not host-project experience docs, host-project task-stage docs, test fixtures, or internal maintainer docs.
 
 ## Build Integration Boundary

@@ -17,7 +17,7 @@ Resolve the task-doc root in this order:
 
 1. explicit task-doc root from the active host project's `claude.md`
 2. default namespaced root:
-   - `docs/cpp-mmorpg-gameplay/tasks/`
+   - `docs/cmg/tasks/`
 
 The plugin repository is not the task-doc root.
 
