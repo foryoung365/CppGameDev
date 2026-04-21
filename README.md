@@ -41,6 +41,16 @@ Use the plugin namespace:
 - `/cmg:gp-svn-handoff`
 - `/cmg:gp-compound`
 - `/cmg:gp-compound-refresh`
+- `/cmg:gp-design-parser`
+
+## Optional Standalone Parser
+
+The plugin also ships one namespaced standalone parser command:
+
+- `/cmg:gp-design-parser`
+
+This command loads the standalone `gp-design-parser` skill for annotated design-doc parsing and implementation-doc rewriting.
+It is not part of the normal `gp-intake` or task-stage workflow unless the user explicitly asks to combine them.
 
 ## Marketplace
 

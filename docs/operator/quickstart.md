@@ -34,6 +34,14 @@ Or, if you want Claude Code to fetch the marketplace from GitHub:
 - `/cmg:gp-svn-handoff`
 - `/cmg:gp-compound`
 - `/cmg:gp-compound-refresh`
+- `/cmg:gp-design-parser`
+
+## Optional Standalone Parser
+
+Use `/cmg:gp-design-parser` when you want the plugin namespace to invoke the standalone `gp-design-parser` skill directly.
+
+- It parses annotated MMORPG or gameplay design docs and rewrites them into implementation docs for gameplay programmers.
+- It stays outside the normal `gp-intake` / task-stage flow unless you explicitly ask to combine them.
 
 ## Main-Agent Orchestrated Model
 
@@ -52,6 +60,7 @@ This plugin is not a fully autonomous subagent pipeline.
 - `gp-svn-handoff`: prepare a feature-sized SVN delivery handoff with validation evidence
 - `gp-compound`: write a verified gameplay experience document into the host project
 - `gp-compound-refresh`: maintain verified gameplay experience documents in the host project
+- `gp-design-parser`: run the standalone design-doc parser without entering the normal gameplay workflow
 
 ## Human Reading Order
 

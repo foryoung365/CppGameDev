@@ -114,6 +114,7 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 		'agents',
 		'commands',
 		'docs\operator\quickstart.md',
+		'commands\gp-design-parser.md',
 		'skills\gp-compound\SKILL.md',
 		'skills\gp-compound\assets\bug-track-template.md',
 		'skills\gp-compound\assets\knowledge-track-template.md',
@@ -127,6 +128,11 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 		'skills\gp-subagent-orchestration\references\delegation-matrix.md',
 		'skills\gp-task-stage-discipline\SKILL.md',
 		'skills\gp-task-stage-discipline\references\task-stage-templates.md',
+		'skills\gp-design-parser\SKILL.md',
+		'skills\gp-design-parser\implementation-doc-template.md',
+		'skills\gp-design-parser\build-pdf-tool.ps1',
+		'skills\gp-design-parser\pdf_to_annotated_markdown.py',
+		'skills\gp-design-parser\bin\pdf-to-annotated-markdown.exe',
 		'agents\gp-experience-researcher.md',
 		'agents\checklist-reviewer.md',
 		'commands\gp-compound.md',
@@ -787,9 +793,15 @@ Invoke-ToolkitCheck 'offline package excludes retired untracked runtime files' {
 			Assert-Condition ($entryNames -contains 'agents/gp-experience-researcher.md') 'packaged zip is missing agents/gp-experience-researcher.md'
 			Assert-Condition ($entryNames -contains 'agents/checklist-reviewer.md') 'packaged zip is missing agents/checklist-reviewer.md'
 			Assert-Condition ($entryNames -contains 'commands/gp-intake.md') 'packaged zip is missing commands/gp-intake.md'
+			Assert-Condition ($entryNames -contains 'commands/gp-design-parser.md') 'packaged zip is missing commands/gp-design-parser.md'
 			Assert-Condition ($entryNames -contains 'skills/gp-experience-researcher/SKILL.md') 'packaged zip is missing skills/gp-experience-researcher/SKILL.md'
 			Assert-Condition ($entryNames -contains 'skills/gp-review-checklist/SKILL.md') 'packaged zip is missing skills/gp-review-checklist/SKILL.md'
 			Assert-Condition ($entryNames -contains 'skills/gp-review-checklist/references/code-review-checklist.md') 'packaged zip is missing skills/gp-review-checklist/references/code-review-checklist.md'
+			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/SKILL.md') 'packaged zip is missing skills/gp-design-parser/SKILL.md'
+			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/implementation-doc-template.md') 'packaged zip is missing skills/gp-design-parser/implementation-doc-template.md'
+			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/build-pdf-tool.ps1') 'packaged zip is missing skills/gp-design-parser/build-pdf-tool.ps1'
+			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/pdf_to_annotated_markdown.py') 'packaged zip is missing skills/gp-design-parser/pdf_to_annotated_markdown.py'
+			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe') 'packaged zip is missing skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe'
 			Assert-Condition (-not ($entryNames -contains 'commands/intake.md')) 'packaged zip must not include stale commands/intake.md'
 			Assert-Condition (-not ($entryNames -contains 'commands/scratch-not-for-release.md')) 'packaged zip must not include commands/scratch-not-for-release.md'
 			Assert-Condition (-not ($entryNames -contains 'commands/svn-handoff.md')) 'packaged zip must not include stale commands/svn-handoff.md'
@@ -863,6 +875,10 @@ Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 		@{
 			Path = 'commands/gp-compound-refresh.md'
 			Needles = @('gp-compound-refresh', 'host project', 'keep', 'update', 'consolidate', 'delete')
+		},
+		@{
+			Path = 'commands/gp-design-parser.md'
+			Needles = @('gp-design-parser', '$ARGUMENTS', 'standalone', 'do not route it through `gp-intake`', 'implementation-doc-template.md', 'pdf-to-annotated-markdown.exe')
 		}
 	)
 

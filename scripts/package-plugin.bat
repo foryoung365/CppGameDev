@@ -41,7 +41,13 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	");" ^
 	"$allowedUntrackedFiles = @(" ^
 	"  'agents/gp-experience-researcher.md'," ^
-	"  'skills/gp-experience-researcher/SKILL.md'" ^
+	"  'skills/gp-experience-researcher/SKILL.md'," ^
+	"  'commands/gp-design-parser.md'," ^
+	"  'skills/gp-design-parser/SKILL.md'," ^
+	"  'skills/gp-design-parser/implementation-doc-template.md'," ^
+	"  'skills/gp-design-parser/build-pdf-tool.ps1'," ^
+	"  'skills/gp-design-parser/pdf_to_annotated_markdown.py'," ^
+	"  'skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe'" ^
 	");" ^
 	"$trackedPackageFiles = @(& git -C $repo ls-files --cached -- $packageRoots);" ^
 	"if ($LASTEXITCODE -ne 0) { throw 'Failed to enumerate tracked package files' };" ^
@@ -62,8 +68,14 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"  'agents\checklist-reviewer.md'," ^
 	"  'commands\gp-compound.md'," ^
 	"  'commands\gp-compound-refresh.md'," ^
+	"  'commands\gp-design-parser.md'," ^
 	"  'skills\gp-compound\SKILL.md'," ^
 	"  'skills\gp-compound-refresh\SKILL.md'," ^
+	"  'skills\gp-design-parser\SKILL.md'," ^
+	"  'skills\gp-design-parser\implementation-doc-template.md'," ^
+	"  'skills\gp-design-parser\build-pdf-tool.ps1'," ^
+	"  'skills\gp-design-parser\pdf_to_annotated_markdown.py'," ^
+	"  'skills\gp-design-parser\bin\pdf-to-annotated-markdown.exe'," ^
 	"  'skills\gp-experience-researcher\SKILL.md'," ^
 	"  'skills\gp-review-checklist\SKILL.md'," ^
 	"  'skills\gp-review-checklist\references\code-review-checklist.md'," ^
