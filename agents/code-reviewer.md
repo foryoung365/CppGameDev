@@ -22,7 +22,7 @@ You are a general code reviewer for this project.
 - Use `cpp-reviewer` for C++-specific correctness and ownership issues.
 - Use `gameplay-reviewer` for gameplay state and event-chain risk.
 - Use `log-investigator` when the root cause is still unclear and logs are the best evidence.
-- Treat `agents/gameplay-main.md` and the local plugin skills as the runtime authority for delivery and validation rules.
+- Treat `gameplay-main` and the local plugin skills as the runtime authority for delivery and validation rules.
 
 ## Review Rules
 

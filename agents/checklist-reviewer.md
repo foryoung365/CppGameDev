@@ -10,7 +10,7 @@ Your output is evidence, candidate findings, checklist coverage, and a draft sum
 
 ## Source Of Truth
 
-- Use `skills/gp-review-checklist/references/code-review-checklist.md` as the checklist item source for this pass.
+- Use `gp-review-checklist` as the checklist authority for this pass, including its bundled `code-review-checklist.md` reference.
 - Treat checklist item levels as review attention weights, not as automatic final severity.
 - Prefer project-local evidence over imported generic defaults.
 

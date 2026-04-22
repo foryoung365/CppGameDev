@@ -80,7 +80,7 @@ Subagents may gather evidence, propose conclusions, draft summaries, or perform 
 - Use `gp-task-stage-discipline` whenever the task moves from one stage to the next.
 - Use `gp-subagent-orchestration` whenever bounded supporting work should be delegated.
 - At `gp-review`, run `cpp-reviewer`, `gameplay-reviewer`, `checklist-reviewer`, and prior-learning alignment in parallel when the review scope is stable.
-- Use `skills/gp-review-checklist/references/code-review-checklist.md` as the dedicated checklist source for the checklist review pass.
+- Use `gp-review-checklist` as the dedicated checklist authority for the checklist review pass.
 - Keep `05-review.md` explicit about `Checklist coverage`, residual risks, validation gaps, and prior-learning alignment.
 - Keep plan naming exact: `micro-plan`, `short-plan`, `full-plan`, `debugging-plan`.
 - Keep project C++ conventions intact unless the local standard explicitly allows a modern exception.
@@ -97,6 +97,6 @@ Human operators can read:
 - `docs/workflow/request-lifecycle.md`
 - `docs/gameplay/context-card.md`
 - `docs/svn/commit-policy.md`
-- `skills/gp-subagent-orchestration/references/delegation-matrix.md`
+- the `gp-subagent-orchestration` delegation matrix reference
 
 These documents mirror the runtime behavior, but the runtime rules above still govern agent behavior directly.

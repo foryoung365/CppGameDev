@@ -862,7 +862,7 @@ Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 		},
 		@{
 			Path = 'commands/gp-review.md'
-			Needles = @('gp-task-stage-discipline', 'cpp-reviewer', 'gameplay-reviewer', 'checklist-reviewer', 'code-review-checklist.md', 'gp-experience-researcher', 'Relevant prior learnings', 'Checklist coverage', '05-review.md')
+			Needles = @('gp-task-stage-discipline', 'cpp-reviewer', 'gameplay-reviewer', 'checklist-reviewer', 'gp-review-checklist', 'gp-experience-researcher', 'Relevant prior learnings', 'Checklist coverage', '05-review.md')
 		},
 		@{
 			Path = 'commands/gp-svn-handoff.md'
@@ -899,12 +899,65 @@ Invoke-ToolkitCheck 'gp-review does not call reviewer agents as skills' {
 	$reviewCommandPath = Join-Path $repoRoot 'commands/gp-review.md'
 	$text = Get-FileText -Path $reviewCommandPath
 
-	Assert-Condition ($text -match [regex]::Escape('agents/cpp-reviewer.md')) 'commands/gp-review.md must reference agents/cpp-reviewer.md'
-	Assert-Condition ($text -match [regex]::Escape('agents/gameplay-reviewer.md')) 'commands/gp-review.md must reference agents/gameplay-reviewer.md'
-	Assert-Condition ($text -match [regex]::Escape('agents/checklist-reviewer.md')) 'commands/gp-review.md must reference agents/checklist-reviewer.md'
-	Assert-Condition ($text -notmatch 'Run\s+`cpp-reviewer`') 'commands/gp-review.md must not invoke cpp-reviewer as a skill'
-	Assert-Condition ($text -notmatch 'Run\s+`gameplay-reviewer`') 'commands/gp-review.md must not invoke gameplay-reviewer as a skill'
-	Assert-Condition ($text -notmatch 'Run\s+`checklist-reviewer`') 'commands/gp-review.md must not invoke checklist-reviewer as a skill'
+	Assert-Condition ($text -match [regex]::Escape('`cpp-reviewer` agent')) 'commands/gp-review.md must reference the cpp-reviewer agent by name'
+	Assert-Condition ($text -match [regex]::Escape('`gameplay-reviewer` agent')) 'commands/gp-review.md must reference the gameplay-reviewer agent by name'
+	Assert-Condition ($text -match [regex]::Escape('`checklist-reviewer` agent')) 'commands/gp-review.md must reference the checklist-reviewer agent by name'
+	Assert-Condition ($text -notmatch [regex]::Escape('agents/cpp-reviewer.md')) 'commands/gp-review.md must not use agents/cpp-reviewer.md runtime path'
+	Assert-Condition ($text -notmatch [regex]::Escape('agents/gameplay-reviewer.md')) 'commands/gp-review.md must not use agents/gameplay-reviewer.md runtime path'
+	Assert-Condition ($text -notmatch [regex]::Escape('agents/checklist-reviewer.md')) 'commands/gp-review.md must not use agents/checklist-reviewer.md runtime path'
+}
+
+Invoke-ToolkitCheck 'runtime prompts avoid plugin-relative lookup paths' {
+	$checks = @(
+		@{
+			Path = 'commands/gp-review.md'
+			Forbidden = @(
+				'agents/cpp-reviewer.md',
+				'agents/gameplay-reviewer.md',
+				'agents/checklist-reviewer.md',
+				'skills/gp-review-checklist/references/code-review-checklist.md'
+			)
+		},
+		@{
+			Path = 'commands/gp-design-parser.md'
+			Forbidden = @(
+				'skills/gp-design-parser/SKILL.md',
+				'skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe',
+				'skills/gp-design-parser/build-pdf-tool.ps1',
+				'skills/gp-design-parser/pdf_to_annotated_markdown.py'
+			)
+		},
+		@{
+			Path = 'agents/checklist-reviewer.md'
+			Forbidden = @(
+				'skills/gp-review-checklist/references/code-review-checklist.md'
+			)
+		},
+		@{
+			Path = 'agents/gp-experience-researcher.md'
+			Forbidden = @(
+				'skills/gp-experience-researcher/SKILL.md'
+			)
+		},
+		@{
+			Path = 'agents/code-reviewer.md'
+			Forbidden = @(
+				'agents/gameplay-main.md'
+			)
+		}
+	)
+
+	$hits = @()
+	foreach ($check in $checks) {
+		$text = Get-FileText -Path (Join-Path $repoRoot $check.Path)
+		foreach ($forbidden in $check.Forbidden) {
+			if ($text -match [regex]::Escape($forbidden)) {
+				$hits += "$($check.Path) still contains $forbidden"
+			}
+		}
+	}
+
+	Assert-Condition ($hits.Count -eq 0) ($hits -join '; ')
 }
 
 Invoke-ToolkitCheck 'specialist agents stay advisory under main-agent orchestration' {
@@ -993,11 +1046,11 @@ Invoke-ToolkitCheck 'checklist review runtime stays explicit in runtime files' {
 	$checks = @(
 		@{
 			Path = 'agents/gameplay-main.md'
-			Needles = @('checklist-reviewer', 'code-review-checklist.md', 'Checklist coverage')
+			Needles = @('checklist-reviewer', 'gp-review-checklist', 'Checklist coverage')
 		},
 		@{
 			Path = 'commands/gp-review.md'
-			Needles = @('checklist-reviewer', 'code-review-checklist.md', 'Checklist coverage')
+			Needles = @('checklist-reviewer', 'gp-review-checklist', 'Checklist coverage')
 		},
 		@{
 			Path = 'skills/gp-review-checklist/SKILL.md'
@@ -1005,7 +1058,7 @@ Invoke-ToolkitCheck 'checklist review runtime stays explicit in runtime files' {
 		},
 		@{
 			Path = 'agents/checklist-reviewer.md'
-			Needles = @('Checklist Coverage', 'Do not issue the final review ruling.', 'skills/gp-review-checklist/references/code-review-checklist.md')
+			Needles = @('Checklist Coverage', 'Do not issue the final review ruling.', 'gp-review-checklist')
 		},
 		@{
 			Path = 'docs/operator/quickstart.md'
