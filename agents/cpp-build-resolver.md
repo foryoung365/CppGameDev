@@ -24,6 +24,8 @@ Identify the first actionable build error, prepare the smallest candidate fix, a
 ## Rules
 
 - Keep changes surgical.
+- Prefer MCP tools supplied by the active Claude Code session when file tools are unavailable or blocked by hooks.
+- If a read/search tool is blocked, do not retry it repeatedly; switch to available MCP evidence or ask the main agent for the missing build output, file, or symbol detail.
 - Do not modernize unrelated code style or do cleanup refactors unless that change is required to fix the current build error.
 - Do not expand the scope into refactors unless the error truly requires it.
 - Keep the project's existing memory, naming, and formatting conventions.

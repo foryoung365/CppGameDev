@@ -958,6 +958,60 @@ Invoke-ToolkitCheck 'gp-review does not call reviewer agents as skills' {
 	Assert-Condition ($text -notmatch [regex]::Escape('agents/checklist-reviewer.md')) 'commands/gp-review.md must not use agents/checklist-reviewer.md runtime path'
 }
 
+Invoke-ToolkitCheck 'gp-review specialist agents stay bounded' {
+	$reviewCommandText = Get-FileText -Path (Join-Path $repoRoot 'commands/gp-review.md')
+	$gameplayText = Get-FileText -Path (Join-Path $repoRoot 'agents/gameplay-reviewer.md')
+	$checklistText = Get-FileText -Path (Join-Path $repoRoot 'agents/checklist-reviewer.md')
+
+	Assert-Condition ($reviewCommandText -match [regex]::Escape('bounded review packet')) 'commands/gp-review.md must require a bounded review packet before specialist review agents'
+	Assert-Condition ($reviewCommandText -match [regex]::Escape('Needs main-agent input')) 'commands/gp-review.md must tell bounded review agents to report missing evidence instead of broad scans'
+	Assert-Condition ($gameplayText -match [regex]::Escape('Bounded Review Contract')) 'agents/gameplay-reviewer.md must define a bounded review contract'
+	Assert-Condition ($gameplayText -match [regex]::Escape('disallowedTools: ["Write", "Edit", "Bash"]')) 'agents/gameplay-reviewer.md must deny write and Bash tools while inheriting MCP tools'
+	Assert-Condition ($gameplayText -notmatch '(?m)^tools:') 'agents/gameplay-reviewer.md must not use a tools allowlist that hides MCP tools'
+	Assert-Condition ($gameplayText -match [regex]::Escape('Do not run build commands, tests, repository-wide scans, or open-ended searches.')) 'agents/gameplay-reviewer.md must forbid open-ended searches'
+	Assert-Condition ($gameplayText -match [regex]::Escape('Needs main-agent input')) 'agents/gameplay-reviewer.md must return missing-evidence requests instead of searching indefinitely'
+	Assert-Condition ($gameplayText -match [regex]::Escape('Prefer MCP tools supplied by the active Claude Code session')) 'agents/gameplay-reviewer.md must prefer inherited MCP tools when file tools are blocked'
+	Assert-Condition ($checklistText -match [regex]::Escape('Bounded Review Contract')) 'agents/checklist-reviewer.md must define a bounded review contract'
+	Assert-Condition ($checklistText -match [regex]::Escape('disallowedTools: ["Write", "Edit", "Bash"]')) 'agents/checklist-reviewer.md must deny write and Bash tools while inheriting MCP tools'
+	Assert-Condition ($checklistText -notmatch '(?m)^tools:') 'agents/checklist-reviewer.md must not use a tools allowlist that hides MCP tools'
+	Assert-Condition ($checklistText -match [regex]::Escape('do not emit a 37-item table')) 'agents/checklist-reviewer.md must forbid full checklist dumps'
+	Assert-Condition ($checklistText -match [regex]::Escape('Needs main-agent input')) 'agents/checklist-reviewer.md must return missing-evidence requests instead of searching indefinitely'
+	Assert-Condition ($checklistText -match [regex]::Escape('Prefer MCP tools supplied by the active Claude Code session')) 'agents/checklist-reviewer.md must prefer inherited MCP tools when file tools are blocked'
+}
+
+Invoke-ToolkitCheck 'read-only specialist agents inherit MCP tools' {
+	$agentPaths = @(
+		'agents/code-reviewer.md',
+		'agents/cpp-reviewer.md',
+		'agents/gp-experience-researcher.md',
+		'agents/log-investigator.md'
+	)
+
+	$missing = @()
+	foreach ($relativePath in $agentPaths) {
+		$text = Get-FileText -Path (Join-Path $repoRoot $relativePath)
+		if ($text -notmatch [regex]::Escape('disallowedTools: ["Write", "Edit", "Bash"]')) {
+			$missing += "$relativePath must deny Write/Edit/Bash while inheriting MCP tools"
+		}
+		if ($text -match '(?m)^tools:') {
+			$missing += "$relativePath must not use a tools allowlist that hides MCP tools"
+		}
+		if ($text -notmatch [regex]::Escape('Prefer MCP tools supplied by the active Claude Code session')) {
+			$missing += "$relativePath must prefer inherited MCP tools when file tools are blocked"
+		}
+		if ($text -notmatch [regex]::Escape('do not retry it repeatedly')) {
+			$missing += "$relativePath must avoid retry loops when read/search tools are blocked"
+		}
+	}
+
+	$buildResolverText = Get-FileText -Path (Join-Path $repoRoot 'agents/cpp-build-resolver.md')
+	Assert-Condition ($buildResolverText -match [regex]::Escape('tools: ["Read", "Write", "Edit", "Bash", "Grep", "Glob"]')) 'agents/cpp-build-resolver.md keeps build-fix tools explicitly'
+	Assert-Condition ($buildResolverText -match [regex]::Escape('Prefer MCP tools supplied by the active Claude Code session')) 'agents/cpp-build-resolver.md must prefer inherited MCP evidence when file tools are blocked'
+	Assert-Condition ($buildResolverText -match [regex]::Escape('do not retry it repeatedly')) 'agents/cpp-build-resolver.md must avoid retry loops when read/search tools are blocked'
+
+	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
+}
+
 Invoke-ToolkitCheck 'runtime prompts avoid plugin-relative lookup paths' {
 	$checks = @(
 		@{
