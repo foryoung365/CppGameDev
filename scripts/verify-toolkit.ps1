@@ -929,7 +929,7 @@ Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 		},
 		@{
 			Path = 'commands/gp-design-parser.md'
-			Needles = @('gp-design-parser', '$ARGUMENTS', 'standalone', 'do not route it through `gp-intake`', 'implementation-doc-template.md', 'pdf-to-annotated-markdown.exe')
+			Needles = @('gp-design-parser', '$ARGUMENTS', 'standalone', 'do not route it through `gp-intake`', 'installed_plugins.json', 'installPath', 'implementation-doc-template.md', 'pdf-to-annotated-markdown.exe')
 		}
 	)
 
