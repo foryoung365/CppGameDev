@@ -23,7 +23,7 @@ Do not choose a fix before the evidence points to the root cause.
 6. Form a single hypothesis.
 7. Test the hypothesis with the smallest change or check that can confirm or reject it.
 8. Record the current symptom, evidence, rejected paths, and root-cause conclusion in `02-debug.md`.
-9. Once the root cause is known, switch to the appropriate plan shape in `writing-plans` and write `03-plan.md` before code changes.
+9. Once the root cause is known, switch to the appropriate plan shape in `writing-plans` and write `03-plan.md` before code changes, including the required `Performance impact` consideration for the proposed fix.
 
 ## Evidence Rules
 

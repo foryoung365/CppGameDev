@@ -22,18 +22,18 @@ argument-hint: [策划案路径、文件名或任务说明]
 - 若目标文件已存在，优先覆盖为最新整理结果；若用户明确要求保留历史版本，再改为时间戳命名。
 - 在完成写入后，再向用户简要说明输出文件路径。
 
-若输入是 PDF，优先使用同目录下的可执行工具 `bin/pdf-to-annotated-markdown.exe` 将 PDF 转为带颜色标注的 Markdown，再基于该 Markdown 识别版本色标与变更内容；不要直接把 PDF 纯文本抽取结果当作颜色判断依据。
+若输入是 PDF，必须在插件安装目录下寻找已捆绑的可执行工具：`skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe`。实际执行时，以当前 `gp-design-parser` 技能所在目录为基准，使用其下 `bin/pdf-to-annotated-markdown.exe` 将 PDF 转为带颜色标注的 Markdown，再基于该 Markdown 识别版本色标与变更内容；不要直接把 PDF 纯文本抽取结果当作颜色判断依据。
 
 - 标注稿默认输出到 `docs/desgin/<原文件名>-颜色标注.md`。
-- 若 `bin/pdf-to-annotated-markdown.exe` 缺失或需要重建，可执行 `build-pdf-tool.ps1` 重新打包。
-- 若 `.exe` 不可用，再退化为直接视觉理解与 PDF 文本抽取混合判断，并在结果中明确说明降级处理。
+- 不要自行构建、重新打包或寻找构建脚本；插件包已经捆绑 exe。
+- 若插件安装目录下的 `.exe` 不可用，停止 PDF 预处理并向用户报告缺失或不可执行的工具路径，不要改用自建工具。
 
 ## 执行步骤
 
 ### 0. 预处理 PDF 色彩信息
 
 - 当输入是 PDF 时，先执行：
-  - `bin/pdf-to-annotated-markdown.exe --input "<pdf路径>" --output "docs/desgin/<原文件名>-颜色标注.md"`
+  - `<插件安装目录>/skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe --input "<pdf路径>" --output "docs/desgin/<原文件名>-颜色标注.md"`
 - 将生成的颜色标注 Markdown 作为颜色识别的一等输入。
 - 若标注稿中存在 `[color bg="..."]`、`[color fg="..."]` 或两者叠加标签，优先据此判断本次版本记录与正文的颜色对应关系。
 - 对于标注稿无法完整覆盖的复杂页面，再补充直接视觉理解复核。

@@ -63,6 +63,7 @@ Main-agent accepted debugging conclusion:
 Files to inspect:
 Files to modify:
 Implementation steps:
+Performance impact:
 Validation steps:
 Compile requirement:
 Delegated subtasks:
@@ -79,6 +80,7 @@ Completed:
 Remaining:
 Blocker:
 Next action:
+Performance notes:
 Corrected mistakes:
 Delegated returns:
 Main-agent acceptance notes:

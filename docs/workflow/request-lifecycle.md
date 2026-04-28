@@ -24,8 +24,8 @@ Each task stage leaves a document behind so work can resume after context loss:
 - `00-context.md`: gameplay context card
 - `01-pre-plan.md`: routed pre-plan and selected plan name
 - `02-debug.md`: active debugging evidence and root-cause work
-- `03-plan.md`: actionable implementation plan, mandatory before edits
-- `04-progress.md`: execution state, blocker, and next step
+- `03-plan.md`: actionable implementation plan, mandatory before edits, including `Performance impact`
+- `04-progress.md`: execution state, blocker, next step, and `Performance notes`
 - `05-review.md`: review findings, checklist coverage, and residual risks
 - `06-handoff.md`: delivery summary and compile evidence
 
@@ -44,14 +44,17 @@ During `gp-review`, the main agent may collect C++ review, gameplay review, chec
 ### micro-plan
 
 Use for low-risk, single-domain changes that can be validated with a short checklist. Keep it tight and action-oriented, but still persist the actionable steps in `03-plan.md`.
+The plan still records `Performance impact`; no target is required, but the impact must be considered or marked not applicable.
 
 ### short-plan
 
 Use for a single gameplay domain change with real regression risk. Break the work into a small number of subtasks, name the validation for each one, and persist them in `03-plan.md`.
+The plan records `Performance impact` before edits, and implementation progress records any relevant `Performance notes`.
 
 ### full-plan
 
 Use for cross-module gameplay work, state-machine changes, protocol changes, persistence changes, or requests that need clearer scoping before implementation. This shape is the most explicit and should separate discovery, implementation, and verification, while still leaving a `03-plan.md` pointer inside the task directory.
+Because the blast radius is broader, the plan must explicitly consider performance impact across hot paths, repeated loops, allocations, database operations, synchronization messages, and cross-module fan-out where applicable.
 
 ### debugging-plan
 

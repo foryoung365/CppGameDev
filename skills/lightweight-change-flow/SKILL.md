@@ -16,9 +16,10 @@ Checklist:
 - Write or update `<task-dir>/03-plan.md` before edits begin.
 - List the exact files to read before editing.
 - Name the exact points to change in those files.
+- Include a `Performance impact` note in `<task-dir>/03-plan.md`; no target is required, but hot paths, repeated loops, allocations, database operations, synchronization messages, and cross-module fan-out must be considered or marked not applicable.
 - Include the exact validation steps to run after the edits.
 - Include a fresh compile step whenever code changes.
-- Update `<task-dir>/04-progress.md` after meaningful progress and before pausing.
+- Update `<task-dir>/04-progress.md` after meaningful progress and before pausing, including `Performance notes` when implementation confirms, changes, or dismisses a performance concern.
 - End with a final handoff note that names the files changed, what was validated, and any known gaps.
 
 Keep the plan narrow, action-oriented, and limited to the minimum files needed for the request.

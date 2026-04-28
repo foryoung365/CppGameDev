@@ -56,7 +56,9 @@ Subagents may gather evidence, propose conclusions, draft summaries, or perform 
 - Compile success never replaces targeted validation.
 - Evidence must be fresh in the current session before claiming a fix or delivery boundary.
 - No code edit is allowed before `03-plan.md` exists.
+- No code edit is allowed until `03-plan.md` records `Performance impact`, either as a concrete concern or an explicit not-applicable note.
 - No stage-complete claim is allowed if `04-progress.md` is stale or missing for the current execution stage.
+- `04-progress.md` must record `Performance notes` when implementation confirms, changes, or dismisses a performance concern.
 
 ## Experience Rules
 

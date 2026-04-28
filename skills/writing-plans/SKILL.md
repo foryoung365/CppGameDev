@@ -28,6 +28,7 @@ Choose the smallest plan shape that still reflects the risk and uncertainty of t
 
 - Exact files or modules to inspect or change
 - The order of work
+- Performance impact consideration for the planned change, or an explicit `not applicable` reason when no meaningful performance path is touched
 - The validation evidence for each task
 - The exit condition for the whole request
 
@@ -50,6 +51,8 @@ Choose the smallest plan shape that still reflects the risk and uncertainty of t
 - Keep tasks concrete enough that another agent can execute them without inventing scope.
 - Avoid placeholder language.
 - Do not include step-level commit language.
+- Do not invent arbitrary performance targets, but always consider likely performance impact before edits. Check whether the change touches hot paths, repeated loops, allocations, database operations, synchronization messages, or cross-module fan-out.
+- If there is no meaningful performance concern, state that explicitly instead of leaving performance unaddressed.
 - If the work is diagnostic, keep the plan rooted in evidence collection and root cause confirmation first.
 
 ## Handoff

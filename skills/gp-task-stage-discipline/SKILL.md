@@ -115,6 +115,7 @@ This is mandatory before any code edit, for **all** implementation paths:
 - exact files to inspect
 - exact files to modify
 - ordered implementation steps
+- performance impact consideration, including an explicit `not applicable` reason when no meaningful performance path is touched
 - validation steps
 - compile requirement when code changes
 - delegated implementation or research subtasks, when used
@@ -132,6 +133,7 @@ At minimum capture:
 - remaining steps
 - blocker, if any
 - next action
+- performance notes from implementation, including any confirmed no-op or not-applicable conclusion
 - corrected mistakes and their verified fixes, when they occur
 - delegated subtask returns, when they occur
 - main-agent acceptance or rejection notes
@@ -181,6 +183,7 @@ After context compression, session restart, or agent handoff:
 ## Hard Gates
 
 - No `03-plan.md` -> no code edits
+- No performance impact consideration in `03-plan.md` -> no code edits
 - No current `04-progress.md` update -> no stage-complete claim
 - No fresh compile evidence for code-changing work -> no ready conclusion in `06-handoff.md`
 

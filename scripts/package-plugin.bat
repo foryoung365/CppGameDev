@@ -37,7 +37,9 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"  'agents/gameplay-learnings-researcher.md'," ^
 	"  'commands/intake.md'," ^
 	"  'commands/svn-handoff.md'," ^
-	"  'skills/gp-experience-check/SKILL.md'" ^
+	"  'skills/gp-experience-check/SKILL.md'," ^
+	"  'skills/gp-design-parser/build-pdf-tool.ps1'," ^
+	"  'skills/gp-design-parser/pdf_to_annotated_markdown.py'" ^
 	");" ^
 	"$allowedUntrackedFiles = @(" ^
 	"  'agents/gp-experience-researcher.md'," ^
@@ -45,8 +47,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"  'commands/gp-design-parser.md'," ^
 	"  'skills/gp-design-parser/SKILL.md'," ^
 	"  'skills/gp-design-parser/implementation-doc-template.md'," ^
-	"  'skills/gp-design-parser/build-pdf-tool.ps1'," ^
-	"  'skills/gp-design-parser/pdf_to_annotated_markdown.py'," ^
 	"  'skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe'" ^
 	");" ^
 	"$trackedPackageFiles = @(& git -C $repo ls-files --cached -- $packageRoots);" ^
@@ -73,8 +73,6 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"  'skills\gp-compound-refresh\SKILL.md'," ^
 	"  'skills\gp-design-parser\SKILL.md'," ^
 	"  'skills\gp-design-parser\implementation-doc-template.md'," ^
-	"  'skills\gp-design-parser\build-pdf-tool.ps1'," ^
-	"  'skills\gp-design-parser\pdf_to_annotated_markdown.py'," ^
 	"  'skills\gp-design-parser\bin\pdf-to-annotated-markdown.exe'," ^
 	"  'skills\gp-experience-researcher\SKILL.md'," ^
 	"  'skills\gp-review-checklist\SKILL.md'," ^

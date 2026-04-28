@@ -30,7 +30,6 @@
 
 已发布文档仅用于人员阅读；运行权威仍以插件资产为准，包括 `commands/`、`agents/`、`skills/` 与 `.claude-plugin/` 下的清单文件。
 
-
 ## 安装方式
 
 ### 1. 通过本地 marketplace 安装
@@ -86,8 +85,8 @@
 
 0. 使用 `/cmg:gp-design-parser` 解析策划案，会在项目根目录的 `docs/design` 目录下生成实现文档。
 1. 使用 `/cmg:gp-intake` 分析步骤0生成的实现文档 建立上下文卡片和任务路线。
-2. 根据路由结果完成 `03-plan.md`，再开始代码修改。
-3. 修改过程中持续维护 `04-progress.md`。
+2. 根据路由结果完成 `03-plan.md`，并写明 `Performance impact`，再开始代码修改。
+3. 修改过程中持续维护 `04-progress.md`，在实现确认、改变或排除性能影响时记录 `Performance notes`。
 4. 使用 `/cmg:gp-review` 形成审查结论与残余风险记录。
 5. 编译与目标验证通过后，使用 `/cmg:gp-svn-handoff` 准备交付摘要。
 6. 若本次任务沉淀出可复用经验，再使用 `/cmg:gp-compound` 写入宿主项目经验库。
@@ -115,8 +114,8 @@ docs/cmg/tasks/YYYY-MM-DD-<task-slug>/
 - `00-context.md`：玩法上下文卡片。
 - `01-pre-plan.md`：路由结果与主代理接受的 `pre-plan`。
 - `02-debug.md`：调试证据、复现、根因定位过程。
-- `03-plan.md`：可执行实现计划；代码修改前必须存在。
-- `04-progress.md`：执行进度、阻塞、下一步和验证状态。
+- `03-plan.md`：可执行实现计划；代码修改前必须存在，并包含 `Performance impact`。不要求达到固定性能指标，但必须说明性能影响或明确标记不适用。
+- `04-progress.md`：执行进度、阻塞、下一步、验证状态和 `Performance notes`。
 - `05-review.md`：审查发现、Checklist coverage、残余风险与验证缺口。
 - `06-handoff.md`：交付摘要、最新编译证据、验证证据、风险与回滚说明。
 
@@ -137,8 +136,10 @@ docs/cmg/solutions/patterns/
 
 ## 运行规则摘要
 
+- 项目约定优先于引入的 ECC 默认规则；若宿主项目规则与通用规则冲突，应以宿主项目规则为准。
 - 主代理负责所有阶段推进和最终判断；子代理可以收集证据、草拟结论或执行有限支持工作，但不能单独推进任务状态。
 - 任务入口链路固定为 `request -> gameplay-context-guard -> task-intake-router -> pre-plan`。
+- 计划与实现阶段必须考虑性能影响；不强制设定性能目标，但 `03-plan.md` 必须记录 `Performance impact`，`04-progress.md` 应记录实现中的 `Performance notes`。
 - SVN 交付保持 feature-sized 粒度，提交只允许对应 one complete feature or one complete fix。
 - 任何 commit-ready 结论都需要 fresh successful compile；targeted validation 仍然必须依据改动风险单独完成。
 - 插件不定义宿主项目的构建命令；编译证据应来自宿主项目的标准构建脚本、`claude.md` 或等价本地配置。

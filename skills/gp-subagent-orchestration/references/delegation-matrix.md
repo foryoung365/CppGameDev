@@ -34,6 +34,7 @@
   - decide whether code edits may start
 - Subagents may do:
   - draft file lists
+  - draft performance impact notes
   - draft validation steps
   - draft compile entry notes
   - perform bounded implementation work after approval

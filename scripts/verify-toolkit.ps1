@@ -1,4 +1,4 @@
-Set-StrictMode -Version Latest
+﻿Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 $repoRoot = Resolve-Path (Join-Path $PSScriptRoot '..')
@@ -130,8 +130,6 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 		'skills\gp-task-stage-discipline\references\task-stage-templates.md',
 		'skills\gp-design-parser\SKILL.md',
 		'skills\gp-design-parser\implementation-doc-template.md',
-		'skills\gp-design-parser\build-pdf-tool.ps1',
-		'skills\gp-design-parser\pdf_to_annotated_markdown.py',
 		'skills\gp-design-parser\bin\pdf-to-annotated-markdown.exe',
 		'agents\gp-experience-researcher.md',
 		'agents\checklist-reviewer.md',
@@ -285,7 +283,18 @@ Invoke-ToolkitCheck 'project-first governance stays explicit in runtime authorit
 	$missing = @()
 	foreach ($relativePath in $keyFiles) {
 		$text = Get-FileText -Path (Join-Path $repoRoot $relativePath)
-		if ($text -notmatch 'Project conventions override imported ECC defaults|Project conventions override imported generic defaults|Project-local conventions are the default') {
+		$patterns = switch ($relativePath) {
+			'README.md' { @('项目约定优先于引入的 ECC 默认规则') }
+			default { @('Project conventions override imported generic defaults', 'Project-local conventions are the default') }
+		}
+		$matched = $false
+		foreach ($pattern in $patterns) {
+			if ($text -match [regex]::Escape($pattern)) {
+				$matched = $true
+				break
+			}
+		}
+		if (-not $matched) {
 			$missing += "$relativePath missing project-first governance wording"
 		}
 	}
@@ -399,7 +408,7 @@ Invoke-ToolkitCheck 'published docs are marked human-facing and not sole runtime
 	$checks = @(
 		@{
 			Path = 'README.md'
-			Pattern = 'Published docs are human-facing only; runtime authority stays in plugin assets'
+			Pattern = '已发布文档仅用于人员阅读；运行权威仍以插件资产为准'
 		},
 		@{
 			Path = 'docs/operator/quickstart.md'
@@ -471,9 +480,9 @@ Invoke-ToolkitCheck 'experience runtime contract stays host-project scoped and e
 		@{
 			Path = 'README.md'
 			Needles = @(
-				'The plugin supports host-project experience retrieval and experience authoring.',
-				'Experience lives in the host project, not in this plugin repository.',
-				'Historical experience is secondary context only; current code, current evidence, and current validation stay authoritative.'
+				'插件支持宿主项目经验检索与经验写入。',
+				'经验文档位于宿主项目，不位于本插件仓库。',
+				'历史经验只作为二级上下文；当前代码、当前证据与当前验证始终拥有更高优先级。'
 			)
 		}
 	)
@@ -657,7 +666,17 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 				'docs/cmg/tasks/',
 				'03-plan.md',
 				'04-progress.md',
+				'Performance impact',
+				'Performance notes',
 				'06-handoff.md'
+			)
+		},
+		@{
+			Path = 'skills/writing-plans/SKILL.md'
+			Needles = @(
+				'Performance impact consideration',
+				'Do not invent arbitrary performance targets',
+				'If there is no meaningful performance concern, state that explicitly'
 			)
 		},
 		@{
@@ -675,10 +694,13 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 				'05-review.md',
 				'Checklist coverage',
 				'06-handoff.md',
+				'performance impact consideration',
+				'Performance notes',
 				'corrected mistakes and their verified fixes',
 				'Corrected pitfalls from this task',
 				'Transferable lesson candidates from this task',
 				'No `03-plan.md` -> no code edits',
+				'No performance impact consideration in `03-plan.md` -> no code edits',
 				'After context compression, session restart, or agent handoff:'
 			)
 		},
@@ -687,6 +709,8 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 			Needles = @(
 				'03-plan.md',
 				'04-progress.md',
+				'Performance impact',
+				'Performance notes',
 				'fresh compile step'
 			)
 		},
@@ -695,12 +719,28 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 			Needles = @(
 				'03-plan.md',
 				'04-progress.md',
+				'Performance impact',
+				'Performance notes',
 				'fresh compile step'
+			)
+		},
+		@{
+			Path = 'skills/systematic-debugging/SKILL.md'
+			Needles = @(
+				'Performance impact'
+			)
+		},
+		@{
+			Path = 'skills/gp-subagent-orchestration/references/delegation-matrix.md'
+			Needles = @(
+				'draft performance impact notes'
 			)
 		},
 		@{
 			Path = 'skills/gp-task-stage-discipline/references/task-stage-templates.md'
 			Needles = @(
+				'Performance impact:',
+				'Performance notes:',
 				'Checklist coverage:',
 				'Main-agent accepted review conclusion:'
 			)
@@ -712,7 +752,16 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 				'checklist coverage',
 				'03-plan.md',
 				'04-progress.md',
+				'Performance impact',
+				'Performance notes',
 				'06-handoff.md'
+			)
+		},
+		@{
+			Path = 'docs/operator/quickstart.md'
+			Needles = @(
+				'Performance impact',
+				'Performance notes'
 			)
 		},
 		@{
@@ -721,6 +770,8 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 				'docs/cmg/tasks/YYYY-MM-DD-<task-slug>/',
 				'03-plan.md',
 				'04-progress.md',
+				'Performance impact',
+				'Performance notes',
 				'06-handoff.md'
 			)
 		}
@@ -799,9 +850,9 @@ Invoke-ToolkitCheck 'offline package excludes retired untracked runtime files' {
 			Assert-Condition ($entryNames -contains 'skills/gp-review-checklist/references/code-review-checklist.md') 'packaged zip is missing skills/gp-review-checklist/references/code-review-checklist.md'
 			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/SKILL.md') 'packaged zip is missing skills/gp-design-parser/SKILL.md'
 			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/implementation-doc-template.md') 'packaged zip is missing skills/gp-design-parser/implementation-doc-template.md'
-			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/build-pdf-tool.ps1') 'packaged zip is missing skills/gp-design-parser/build-pdf-tool.ps1'
-			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/pdf_to_annotated_markdown.py') 'packaged zip is missing skills/gp-design-parser/pdf_to_annotated_markdown.py'
 			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe') 'packaged zip is missing skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe'
+			Assert-Condition (-not ($entryNames -contains 'skills/gp-design-parser/build-pdf-tool.ps1')) 'packaged zip must not include skills/gp-design-parser/build-pdf-tool.ps1'
+			Assert-Condition (-not ($entryNames -contains 'skills/gp-design-parser/pdf_to_annotated_markdown.py')) 'packaged zip must not include skills/gp-design-parser/pdf_to_annotated_markdown.py'
 			Assert-Condition (-not ($entryNames -contains 'commands/intake.md')) 'packaged zip must not include stale commands/intake.md'
 			Assert-Condition (-not ($entryNames -contains 'commands/scratch-not-for-release.md')) 'packaged zip must not include commands/scratch-not-for-release.md'
 			Assert-Condition (-not ($entryNames -contains 'commands/svn-handoff.md')) 'packaged zip must not include stale commands/svn-handoff.md'
@@ -922,7 +973,6 @@ Invoke-ToolkitCheck 'runtime prompts avoid plugin-relative lookup paths' {
 			Path = 'commands/gp-design-parser.md'
 			Forbidden = @(
 				'skills/gp-design-parser/SKILL.md',
-				'skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe',
 				'skills/gp-design-parser/build-pdf-tool.ps1',
 				'skills/gp-design-parser/pdf_to_annotated_markdown.py'
 			)

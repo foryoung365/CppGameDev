@@ -98,7 +98,9 @@ Stage files:
 - `06-handoff.md`
 
 `03-plan.md` must exist before code edits begin.
+`03-plan.md` must include `Performance impact`; no fixed target is required, but performance impact must be considered or marked not applicable.
 `04-progress.md` must be updated during execution and before pausing.
+`04-progress.md` should include `Performance notes` when implementation confirms, changes, or dismisses a performance concern.
 `05-review.md` should record findings, `Checklist coverage`, residual risks, validation gaps, and prior-learning alignment.
 `06-handoff.md` cannot claim ready state without fresh compile evidence when code changed.
 
