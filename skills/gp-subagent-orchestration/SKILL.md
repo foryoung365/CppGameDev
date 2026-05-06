@@ -90,8 +90,7 @@ Do not let a subagent:
 Use existing specialist agents as worker roles:
 
 - `gp-experience-researcher`
-- `cpp-reviewer`
-- `gameplay-reviewer`
+- `code-reviewer`
 - `log-investigator`
 - `cpp-build-resolver`
 

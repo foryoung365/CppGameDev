@@ -35,6 +35,8 @@ Persist the task state with `gp-task-stage-discipline`:
 - write `05-review.md` for review
 - write `06-handoff.md` before any ready-for-delivery conclusion
 
+For independent `gp-review` requests, create or reuse a review-only task directory and write `review.md` instead of forcing the full task-stage chain. Independent review may add the smallest necessary stage documents when review quality requires them, but it does not create a delivery-ready or commit-ready conclusion.
+
 ## Main-Agent Authority
 
 The main agent alone may decide:
@@ -65,8 +67,8 @@ Subagents may gather evidence, propose conclusions, draft summaries, or perform 
 - Historical experience is secondary context only.
 - Current code, current logs, current reproduction evidence, and current validation outrank historical experience.
 - Use host-project experience retrieval at `gp-intake`, `gp-debug`, `gp-review`, and `gp-svn-handoff`.
-- Resolve the host-project experience library root from the active host project's `claude.md` when it defines one.
-- Otherwise use the default host-project paths:
+- `gp-experience-researcher` search is limited to the active host project's `docs/cmg/solutions/**` subtree. Do not expand experience retrieval to task docs, source files, logs, build output, the plugin repository, or a custom path from `claude.md`.
+- Within that fixed subtree, use these supported tracks:
   - `docs/cmg/solutions/bugs/`
   - `docs/cmg/solutions/patterns/`
 - Resolve the host-project task-doc root from the active host project's `claude.md` when it defines one.
@@ -81,9 +83,8 @@ Subagents may gather evidence, propose conclusions, draft summaries, or perform 
 - Use `task-intake-router` to emit the `pre-plan` fields: `goal`, `impact`, `unknowns`, `validation`, and `selected plan name`.
 - Use `gp-task-stage-discipline` whenever the task moves from one stage to the next.
 - Use `gp-subagent-orchestration` whenever bounded supporting work should be delegated.
-- At `gp-review`, run `cpp-reviewer`, `gameplay-reviewer`, `checklist-reviewer`, and prior-learning alignment in parallel when the review scope is stable.
-- Use `gp-review-checklist` as the dedicated checklist authority for the checklist review pass.
-- Keep `05-review.md` explicit about `Checklist coverage`, residual risks, validation gaps, and prior-learning alignment.
+- At `gp-review`, run bounded draft review, evidence collation, and prior-learning alignment in parallel when the review scope is stable.
+- Keep workflow `05-review.md`, or independent `review.md`, explicit about review scope coverage, residual risks, validation gaps, and prior-learning alignment.
 - Keep plan naming exact: `micro-plan`, `short-plan`, `full-plan`, `debugging-plan`.
 - Keep project C++ conventions intact unless the local standard explicitly allows a modern exception.
 - Recognize these manual experience commands:

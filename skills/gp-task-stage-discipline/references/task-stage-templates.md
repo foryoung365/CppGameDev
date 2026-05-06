@@ -92,10 +92,28 @@ Main-agent acceptance notes:
 # Review
 
 Findings:
-Checklist coverage:
+Review scope coverage:
 Residual risks:
 Validation gaps:
 Prior learnings alignment:
+Delegated review drafts:
+Main-agent accepted review conclusion:
+```
+
+## `review.md`
+
+Use this for independent `gp-review` runs.
+
+```markdown
+# Independent Review
+
+Review target:
+Findings:
+Review scope coverage:
+Residual risks:
+Validation gaps:
+Prior learnings alignment:
+Task-stage context limitations:
 Delegated review drafts:
 Main-agent accepted review conclusion:
 ```

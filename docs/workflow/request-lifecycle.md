@@ -13,7 +13,7 @@ The flow works like this:
 1. `gameplay-context-guard` forces the request into a gameplay context card before any edit or plan is drafted.
 2. `task-intake-router` uses the context card to classify the request by root-cause clarity, scope, and risk, then emits the `pre-plan` output.
 3. `pre-plan` is the router's output stage with fixed fields: `goal`, `impact`, `unknowns`, `validation`, and `selected plan name`.
-4. `gp-experience-researcher` can add an `Experience summary` after `pre-plan` using the host project's verified experience library.
+4. `gp-experience-researcher` can add an `Experience summary` after `pre-plan` by searching only the host project's `docs/cmg/solutions/**` subtree.
 5. The active task also persists stage files in the host project under `docs/cmg/tasks/YYYY-MM-DD-<task-slug>/`, unless the host project's `claude.md` overrides that root.
 6. Intake creates a new dated task directory only for a new task instance; later stages reuse the active task directory for that same task.
 
@@ -26,8 +26,10 @@ Each task stage leaves a document behind so work can resume after context loss:
 - `02-debug.md`: active debugging evidence and root-cause work
 - `03-plan.md`: actionable implementation plan, mandatory before edits, including `Performance impact`
 - `04-progress.md`: execution state, blocker, next step, and `Performance notes`
-- `05-review.md`: review findings, checklist coverage, and residual risks
+- `05-review.md`: workflow review findings, review scope coverage, and residual risks
 - `06-handoff.md`: delivery summary and compile evidence
+
+Independent `gp-review` can run without continuing the full stage flow. It uses the same task-doc root, creates a review-only directory when needed, and writes its accepted result to `review.md`. The main agent may create the smallest necessary stage documents when missing context would weaken the review, but independent review does not imply handoff-ready, delivery-ready, or commit-ready status.
 
 Each stage document may also record:
 
@@ -37,7 +39,7 @@ Each stage document may also record:
 
 The task does not advance until the main agent records the accepted conclusion.
 
-During `gp-review`, the main agent may collect C++ review, gameplay review, checklist review, and relevant prior learnings in parallel before accepting the final review conclusion.
+During `gp-review`, the main agent may collect bounded review drafts, evidence collation, and relevant prior learnings in parallel before accepting the final review conclusion.
 
 ## Plan Shapes
 

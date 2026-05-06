@@ -45,13 +45,12 @@
 - Main agent must do:
   - accept or reject findings
   - determine residual risk
-  - finalize `05-review.md`
+  - finalize `05-review.md` for workflow review or `review.md` for independent review
 - Subagents may do:
-  - cpp review draft
-  - gameplay review draft
-  - checklist review draft
+  - bounded review draft
+  - evidence collation
   - prior-learning alignment summary
-  - run `cpp review draft`, `gameplay review draft`, `checklist review draft`, and `prior-learning alignment summary` in parallel whenever the review scope is stable
+  - run `bounded review draft`, `evidence collation`, and `prior-learning alignment summary` in parallel whenever the review scope is stable
 
 ## `gp-svn-handoff`
 

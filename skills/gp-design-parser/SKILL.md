@@ -15,16 +15,16 @@ argument-hint: [策划案路径、文件名或任务说明]
 
 在组织最终输出前，先读取同目录文件 `implementation-doc-template.md`，按其中结构生成结果；若策划案较简单，可合并小节，但不得省略“版本识别结果”“本次变更摘要”“待确认项”。
 
-默认将生成结果写入当前项目的 `docs/desgin/` 目录，而不只是输出在对话中。
+默认将生成结果写入当前项目的 `docs/design/` 目录，而不只是输出在对话中。
 
-- 若目录不存在，先创建 `docs/desgin/`。
+- 若目录不存在，先创建 `docs/design/`。
 - 输出文件名优先使用策划案原文件名，追加 `-功能实现文档.md` 后缀；若无法取得原文件名，则使用 `策划案解析-功能实现文档.md`。
 - 若目标文件已存在，优先覆盖为最新整理结果；若用户明确要求保留历史版本，再改为时间戳命名。
 - 在完成写入后，再向用户简要说明输出文件路径。
 
 若输入是 PDF，必须在插件安装目录下寻找已捆绑的可执行工具：`skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe`。实际执行时，以当前 `gp-design-parser` 技能所在目录为基准，使用其下 `bin/pdf-to-annotated-markdown.exe` 将 PDF 转为带颜色标注的 Markdown，再基于该 Markdown 识别版本色标与变更内容；不要直接把 PDF 纯文本抽取结果当作颜色判断依据。
 
-- 标注稿默认输出到 `docs/desgin/<原文件名>-颜色标注.md`。
+- 标注稿默认输出到 `docs/design/<原文件名>-颜色标注.md`。
 - 不要自行构建、重新打包或寻找构建脚本；插件包已经捆绑 exe。
 - 若插件安装目录下的 `.exe` 不可用，停止 PDF 预处理并向用户报告缺失或不可执行的工具路径，不要改用自建工具。
 
@@ -33,7 +33,7 @@ argument-hint: [策划案路径、文件名或任务说明]
 ### 0. 预处理 PDF 色彩信息
 
 - 当输入是 PDF 时，先执行：
-  - `<插件安装目录>/skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe --input "<pdf路径>" --output "docs/desgin/<原文件名>-颜色标注.md"`
+  - `<插件安装目录>/skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe --input "<pdf路径>" --output "docs/design/<原文件名>-颜色标注.md"`
 - 将生成的颜色标注 Markdown 作为颜色识别的一等输入。
 - 若标注稿中存在 `[color bg="..."]`、`[color fg="..."]` 或两者叠加标签，优先据此判断本次版本记录与正文的颜色对应关系。
 - 对于标注稿无法完整覆盖的复杂页面，再补充直接视觉理解复核。
@@ -88,7 +88,7 @@ argument-hint: [策划案路径、文件名或任务说明]
 - 对每条规则强制注明 `主体`；若涉及多个主体，拆分为多条规则或在同一规则下按主体列出动作，不得混写。
 - 输出中必须包含“主体清单与职责边界”以及“主体交接索引”，让后续 agent 能直接按主体继续拆解。
 - 最终产物必须体现“修改后的当前有效规则”，而不是只罗列 diff。
-- 将最终文档保存到当前项目 `docs/desgin/` 目录中的 Markdown 文件。
+- 将最终文档保存到当前项目 `docs/design/` 目录中的 Markdown 文件。
 
 ## 判定准则
 

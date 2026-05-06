@@ -5,7 +5,6 @@ This file records which upstream ideas influenced this plugin and which project-
 | Toolkit file | Upstream source | Decision | Notes |
 | --- | --- | --- | --- |
 | `skills/cpp-coding-standards/SKILL.md` | project skill + ECC cpp-coding-standards | merged, project-first | Full merged project standard; project naming, formatting, explicit-memory, and legacy buffer conventions win; accepted ECC items are limited exceptions: `nullptr`, `using`, `virtual`/`override`/`final`, and Rule of Zero/Five |
-| `agents/cpp-reviewer.md` | merged C++ standard | aligned reviewer | Project-aware C++ reviewer that preserves local naming, formatting, and ownership culture while still blocking real defects |
 | `agents/gameplay-main.md` | local toolkit governance | runtime authority | Main runtime entry point replacing root governance files |
 | `skills/gp-compound/SKILL.md` | CE compound concept | adapted, host-project-first | Keeps the compound idea but writes to host-project docs instead of the plugin repository and rejects speculative learnings |
 | `agents/gp-experience-researcher.md` | CE learnings retrieval concept | adapted, evidence-first | Retrieves verified host-project learnings as secondary context only |
@@ -26,4 +25,3 @@ This file records which upstream ideas influenced this plugin and which project-
 
 - Runtime authority comes from plugin root runtime files such as `skills/`, `agents/`, `commands/`, `settings.json`, and `.claude-plugin/plugin.json`.
 - `docs/workflow/request-lifecycle.md`, `docs/svn/commit-policy.md`, and `docs/gameplay/context-card.md` are operator mirrors for humans and must not be the only place a runtime rule exists.
-- Historical design docs under `docs/superpowers/` are internal reference artifacts, not runtime entry points.

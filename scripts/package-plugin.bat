@@ -29,15 +29,20 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"$dist = Join-Path $repo 'dist';" ^
 	"$stage = Join-Path $dist $plugin.name;" ^
 	"$zip = Join-Path $dist ($plugin.name + '-' + $plugin.version + '.zip');" ^
-	"$packageRoots = @('.claude-plugin','agents','commands','skills','docs/operator','docs/workflow','docs/gameplay','docs/svn','README.md','settings.json');" ^
+	"$packageRoots = @('.claude-plugin','agents','commands','skills','docs/operator','docs/workflow','docs/gameplay','docs/svn','QuickStart.md','settings.json');" ^
 	"Remove-Item -LiteralPath $stage -Recurse -Force -ErrorAction SilentlyContinue;" ^
 	"Remove-Item -LiteralPath $zip -Force -ErrorAction SilentlyContinue;" ^
 	"New-Item -ItemType Directory -Force -Path $stage | Out-Null;" ^
 	"$retiredFiles = @(" ^
+	"  'agents/checklist-reviewer.md'," ^
+	"  'agents/cpp-reviewer.md'," ^
+	"  'agents/gameplay-reviewer.md'," ^
 	"  'agents/gameplay-learnings-researcher.md'," ^
 	"  'commands/intake.md'," ^
 	"  'commands/svn-handoff.md'," ^
 	"  'skills/gp-experience-check/SKILL.md'," ^
+	"  'skills/gp-review-checklist/SKILL.md'," ^
+	"  'skills/gp-review-checklist/references/code-review-checklist.md'," ^
 	"  'skills/gp-design-parser/build-pdf-tool.ps1'," ^
 	"  'skills/gp-design-parser/pdf_to_annotated_markdown.py'" ^
 	");" ^
@@ -64,19 +69,18 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"  Copy-Item -LiteralPath $source -Destination $destination -Force;" ^
 	"}" ^
 	"$expected = @(" ^
+	"  'agents\code-reviewer.md'," ^
 	"  'agents\gp-experience-researcher.md'," ^
-	"  'agents\checklist-reviewer.md'," ^
 	"  'commands\gp-compound.md'," ^
 	"  'commands\gp-compound-refresh.md'," ^
 	"  'commands\gp-design-parser.md'," ^
+	"  'QuickStart.md'," ^
 	"  'skills\gp-compound\SKILL.md'," ^
 	"  'skills\gp-compound-refresh\SKILL.md'," ^
 	"  'skills\gp-design-parser\SKILL.md'," ^
 	"  'skills\gp-design-parser\implementation-doc-template.md'," ^
 	"  'skills\gp-design-parser\bin\pdf-to-annotated-markdown.exe'," ^
 	"  'skills\gp-experience-researcher\SKILL.md'," ^
-	"  'skills\gp-review-checklist\SKILL.md'," ^
-	"  'skills\gp-review-checklist\references\code-review-checklist.md'," ^
 	"  'skills\gp-subagent-orchestration\SKILL.md'," ^
 	"  'skills\gp-subagent-orchestration\references\delegation-matrix.md'," ^
 	"  'skills\gp-task-stage-discipline\SKILL.md'," ^
@@ -88,6 +92,7 @@ powershell -NoProfile -ExecutionPolicy Bypass -Command ^
 	"}" ^
 	"$forbidden = @(" ^
 	"  'docs\superpowers'," ^
+	"  'README.md'," ^
 	"  'docs\upstream-mapping.md'," ^
 	"  'tests'," ^
 	"  '.tmp'," ^

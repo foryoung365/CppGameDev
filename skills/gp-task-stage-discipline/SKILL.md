@@ -33,6 +33,7 @@ Create a new dated task directory when intake is starting a new task instance.
 Reuse the active task directory when later stages are continuing the same task.
 Only create a fresh dated directory mid-flow when the user explicitly starts a different task or asks to fork the current one.
 The dated task directory protects new work from accidentally reusing stale stage docs from an older task with a similar name, while still keeping one task's stages together.
+For independent `gp-review`, create or reuse a review-only task directory such as `YYYY-MM-DD-review-<slug>` and write the review to `review.md`. A review-only directory does not require every stage document unless the main agent decides the review needs that context.
 
 Required stage files:
 
@@ -142,17 +143,35 @@ Update it after meaningful progress and before pausing or handing off to a new s
 
 ### `05-review.md`
 
-Write this when review happens.
+Write this when review happens inside the normal task-stage workflow.
 
 Must capture:
 
 - findings
-- checklist coverage
+- review scope coverage
 - residual risks
 - validation gaps
 - alignment or conflict with prior learnings
 - delegated review drafts, when used
 - main-agent accepted review conclusion
+
+### `review.md`
+
+Write this for independent `gp-review` runs that are not continuing the full task-stage workflow.
+
+Must capture:
+
+- review target and scope
+- findings
+- review scope coverage
+- residual risks
+- validation gaps, including missing fresh compile, targeted validation, or other proof
+- alignment or conflict with prior learnings, when relevant
+- task-stage context limitations, when any matter
+- delegated review drafts, when used
+- main-agent accepted review conclusion
+
+Independent review may report findings without fresh compile or validation evidence. Missing fresh compile, targeted validation, or other proof must be recorded under `Validation gaps`; `review.md` remains the primary output and does not by itself create a delivery-ready or commit-ready conclusion.
 
 ### `06-handoff.md`
 
@@ -193,7 +212,8 @@ After context compression, session restart, or agent handoff:
 - `task-intake-router` feeds `01-pre-plan.md`
 - `systematic-debugging` feeds `02-debug.md`
 - implementation flows feed `03-plan.md` and `04-progress.md`
-- `gp-review` feeds `05-review.md`
+- workflow `gp-review` feeds `05-review.md`
+- independent `gp-review` feeds `review.md`
 - `svn-delivery-handoff` feeds `06-handoff.md`
 
 Use the templates in `references/task-stage-templates.md` when you need a concise structure.

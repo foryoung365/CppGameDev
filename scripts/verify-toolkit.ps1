@@ -70,7 +70,7 @@ function Get-RuntimeTextFiles {
 	$files += @(Get-ChildItem -LiteralPath (Join-Path $repoRoot 'docs\operator') -Recurse -File -Filter '*.md')
 
 	$topLevelFiles = @(
-		'README.md',
+		'QuickStart.md',
 		'docs/upstream-mapping.md',
 		'docs/workflow/request-lifecycle.md',
 		'docs/svn/commit-policy.md',
@@ -110,6 +110,7 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 		'.claude-plugin\marketplace.json',
 		'settings.json',
 		'scripts\package-plugin.bat',
+		'QuickStart.md',
 		'skills',
 		'agents',
 		'commands',
@@ -122,8 +123,6 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 		'skills\gp-compound-refresh\SKILL.md',
 		'skills\gp-compound-refresh\references\refresh-rules.md',
 		'skills\gp-experience-researcher\SKILL.md',
-		'skills\gp-review-checklist\SKILL.md',
-		'skills\gp-review-checklist\references\code-review-checklist.md',
 		'skills\gp-subagent-orchestration\SKILL.md',
 		'skills\gp-subagent-orchestration\references\delegation-matrix.md',
 		'skills\gp-task-stage-discipline\SKILL.md',
@@ -131,8 +130,8 @@ Invoke-ToolkitCheck 'plugin structure and manifest are valid' {
 		'skills\gp-design-parser\SKILL.md',
 		'skills\gp-design-parser\implementation-doc-template.md',
 		'skills\gp-design-parser\bin\pdf-to-annotated-markdown.exe',
+		'agents\code-reviewer.md',
 		'agents\gp-experience-researcher.md',
-		'agents\checklist-reviewer.md',
 		'commands\gp-compound.md',
 		'commands\gp-compound-refresh.md',
 		'tests\fixtures\experience\host-project\docs\cmg\solutions\bugs\combat\buff-remove-ordering-2026-03-30.md',
@@ -256,7 +255,6 @@ Invoke-ToolkitCheck 'toolkit remains self-contained without vendored upstream re
 Invoke-ToolkitCheck 'runtime intake chain stays intact in plugin authorities' {
 	$chainPattern = 'request\s*->\s*gameplay-context-guard\s*->\s*task-intake-router\s*->\s*pre-plan'
 	$keyFiles = @(
-		'README.md',
 		'agents/gameplay-main.md',
 		'docs/workflow/request-lifecycle.md'
 	)
@@ -275,7 +273,6 @@ Invoke-ToolkitCheck 'runtime intake chain stays intact in plugin authorities' {
 
 Invoke-ToolkitCheck 'project-first governance stays explicit in runtime authorities' {
 	$keyFiles = @(
-		'README.md',
 		'agents/gameplay-main.md',
 		'skills/cpp-coding-standards/SKILL.md'
 	)
@@ -284,7 +281,6 @@ Invoke-ToolkitCheck 'project-first governance stays explicit in runtime authorit
 	foreach ($relativePath in $keyFiles) {
 		$text = Get-FileText -Path (Join-Path $repoRoot $relativePath)
 		$patterns = switch ($relativePath) {
-			'README.md' { @('项目约定优先于引入的 ECC 默认规则') }
 			default { @('Project conventions override imported generic defaults', 'Project-local conventions are the default') }
 		}
 		$matched = $false
@@ -337,7 +333,6 @@ Invoke-ToolkitCheck 'routing vocabulary uses approved plan names' {
 
 Invoke-ToolkitCheck 'svn delivery remains feature-sized in runtime files' {
 	$files = @(
-		'README.md',
 		'agents/gameplay-main.md',
 		'docs/svn/commit-policy.md',
 		'skills/svn-delivery-handoff/SKILL.md',
@@ -364,7 +359,6 @@ Invoke-ToolkitCheck 'svn delivery remains feature-sized in runtime files' {
 
 Invoke-ToolkitCheck 'commit gate semantic trio stays aligned across runtime files' {
 	$gateFiles = @(
-		'README.md',
 		'agents/gameplay-main.md',
 		'docs/svn/commit-policy.md',
 		'skills/verification-before-completion/SKILL.md'
@@ -395,21 +389,11 @@ Invoke-ToolkitCheck 'commit gate semantic trio stays aligned across runtime file
 		$missing += 'skills/svn-delivery-handoff/SKILL.md missing validation evidence text'
 	}
 
-	$readmeText = Get-FileText -Path (Join-Path $repoRoot 'README.md')
-	$exactCommand = 'powershell -ExecutionPolicy Bypass -File scripts/verify-toolkit.ps1'
-	if ($readmeText -notmatch [regex]::Escape($exactCommand)) {
-		$missing += 'README.md missing exact verification command'
-	}
-
 	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
 }
 
 Invoke-ToolkitCheck 'published docs are marked human-facing and not sole runtime authority' {
 	$checks = @(
-		@{
-			Path = 'README.md'
-			Pattern = '已发布文档仅用于人员阅读；运行权威仍以插件资产为准'
-		},
 		@{
 			Path = 'docs/operator/quickstart.md'
 			Pattern = 'Runtime authority still lives in plugin assets'
@@ -442,15 +426,28 @@ Invoke-ToolkitCheck 'experience runtime contract stays host-project scoped and e
 			Needles = @(
 				'Historical experience is secondary context only.',
 				'Current code, current logs, current reproduction evidence, and current validation outrank historical experience.',
+				'`gp-experience-researcher` search is limited to the active host project''s `docs/cmg/solutions/**` subtree.',
+				'Do not expand experience retrieval to task docs, source files, logs, build output, the plugin repository, or a custom path from `claude.md`.',
 				'docs/cmg/solutions/bugs/',
 				'docs/cmg/solutions/patterns/'
+			)
+		},
+		@{
+			Path = 'agents/gp-experience-researcher.md'
+			Needles = @(
+				'only under the active host project''s `docs/cmg/solutions/**` subtree',
+				'Search only the host project''s `docs/cmg/solutions/**` subtree',
+				'Do not use `claude.md` or local configuration to widen the search root for this researcher.'
 			)
 		},
 		@{
 			Path = 'skills/gp-experience-researcher/SKILL.md'
 			Needles = @(
 				'Historical experience never outranks:',
-				'Search the host project''s experience library, not the plugin repository.',
+				'Search only the active host project''s fixed experience library subtree:',
+				'docs/cmg/solutions/**',
+				'Do not expand the search to task docs, source files, logs, build output, the plugin repository, or any other directory.',
+				'Do not use `claude.md` or local configuration to widen the search root for this researcher.',
 				'docs/cmg/solutions/bugs/',
 				'docs/cmg/solutions/patterns/'
 			)
@@ -478,11 +475,11 @@ Invoke-ToolkitCheck 'experience runtime contract stays host-project scoped and e
 			)
 		},
 		@{
-			Path = 'README.md'
+			Path = 'docs/operator/quickstart.md'
 			Needles = @(
-				'插件支持宿主项目经验检索与经验写入。',
-				'经验文档位于宿主项目，不位于本插件仓库。',
-				'历史经验只作为二级上下文；当前代码、当前证据与当前验证始终拥有更高优先级。'
+				'This plugin can retrieve and write verified gameplay experience docs',
+				'the library lives in the **host project**, not in this plugin repository.',
+				'Historical experience is secondary context only. Current code, current evidence, and current validation remain authoritative.'
 			)
 		}
 	)
@@ -600,7 +597,7 @@ Invoke-ToolkitCheck 'parallel delegation preference stays explicit in runtime fi
 				'run independent support tasks in parallel when the context card inputs are stable',
 				'run independent reproductions, log extraction, trace comparison, and related-learning retrieval in parallel when they do not depend on each other',
 				'run independent planning support tasks in parallel after the main agent approves scope',
-				'run `cpp review draft`, `gameplay review draft`, `checklist review draft`, and `prior-learning alignment summary` in parallel whenever the review scope is stable',
+				'run `bounded review draft`, `evidence collation`, and `prior-learning alignment summary` in parallel whenever the review scope is stable',
 				'run diff summary, build output summary, validation evidence collation, and prior-learning alignment in parallel once inputs are stable',
 				'run lesson-candidate extraction and overlap search in parallel when they are independent',
 				'## `gp-compound-refresh`',
@@ -622,7 +619,7 @@ Invoke-ToolkitCheck 'parallel delegation preference stays explicit in runtime fi
 		@{
 			Path = 'commands/gp-review.md'
 			Needles = @(
-				'prefer running the C++ review, gameplay review, checklist review, and prior-learning alignment in parallel whenever they are independent'
+				'prefer running independent support work such as draft review, evidence collation, and prior-learning alignment in parallel whenever they are independent'
 			)
 		},
 		@{
@@ -668,6 +665,8 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 				'04-progress.md',
 				'Performance impact',
 				'Performance notes',
+				'review-only task directory',
+				'review.md',
 				'06-handoff.md'
 			)
 		},
@@ -692,7 +691,9 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 				'03-plan.md',
 				'04-progress.md',
 				'05-review.md',
-				'Checklist coverage',
+				'review.md',
+				'review-only task directory',
+				'review scope coverage',
 				'06-handoff.md',
 				'performance impact consideration',
 				'Performance notes',
@@ -741,7 +742,9 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 			Needles = @(
 				'Performance impact:',
 				'Performance notes:',
-				'Checklist coverage:',
+				'Independent Review',
+				'Validation gaps:',
+				'Review scope coverage:',
 				'Main-agent accepted review conclusion:'
 			)
 		},
@@ -749,9 +752,10 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 			Path = 'docs/workflow/request-lifecycle.md'
 			Needles = @(
 				'docs/cmg/tasks/YYYY-MM-DD-<task-slug>/',
-				'checklist coverage',
+				'review scope coverage',
 				'03-plan.md',
 				'04-progress.md',
+				'review.md',
 				'Performance impact',
 				'Performance notes',
 				'06-handoff.md'
@@ -761,18 +765,8 @@ Invoke-ToolkitCheck 'task stage runtime contract stays host-project scoped and d
 			Path = 'docs/operator/quickstart.md'
 			Needles = @(
 				'Performance impact',
-				'Performance notes'
-			)
-		},
-		@{
-			Path = 'README.md'
-			Needles = @(
-				'docs/cmg/tasks/YYYY-MM-DD-<task-slug>/',
-				'03-plan.md',
-				'04-progress.md',
-				'Performance impact',
 				'Performance notes',
-				'06-handoff.md'
+				'review.md'
 			)
 		}
 	)
@@ -807,6 +801,7 @@ Invoke-ToolkitCheck 'offline package excludes retired untracked runtime files' {
 			'skills',
 			'docs',
 			'scripts',
+			'QuickStart.md',
 			'README.md',
 			'settings.json'
 		)
@@ -841,21 +836,26 @@ Invoke-ToolkitCheck 'offline package excludes retired untracked runtime files' {
 				$zip.Entries |
 					ForEach-Object { $_.FullName.Replace('\', '/') }
 			)
+			Assert-Condition ($entryNames -contains 'QuickStart.md') 'packaged zip is missing QuickStart.md'
+			Assert-Condition ($entryNames -contains 'agents/code-reviewer.md') 'packaged zip is missing agents/code-reviewer.md'
 			Assert-Condition ($entryNames -contains 'agents/gp-experience-researcher.md') 'packaged zip is missing agents/gp-experience-researcher.md'
-			Assert-Condition ($entryNames -contains 'agents/checklist-reviewer.md') 'packaged zip is missing agents/checklist-reviewer.md'
 			Assert-Condition ($entryNames -contains 'commands/gp-intake.md') 'packaged zip is missing commands/gp-intake.md'
 			Assert-Condition ($entryNames -contains 'commands/gp-design-parser.md') 'packaged zip is missing commands/gp-design-parser.md'
 			Assert-Condition ($entryNames -contains 'skills/gp-experience-researcher/SKILL.md') 'packaged zip is missing skills/gp-experience-researcher/SKILL.md'
-			Assert-Condition ($entryNames -contains 'skills/gp-review-checklist/SKILL.md') 'packaged zip is missing skills/gp-review-checklist/SKILL.md'
-			Assert-Condition ($entryNames -contains 'skills/gp-review-checklist/references/code-review-checklist.md') 'packaged zip is missing skills/gp-review-checklist/references/code-review-checklist.md'
 			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/SKILL.md') 'packaged zip is missing skills/gp-design-parser/SKILL.md'
 			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/implementation-doc-template.md') 'packaged zip is missing skills/gp-design-parser/implementation-doc-template.md'
 			Assert-Condition ($entryNames -contains 'skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe') 'packaged zip is missing skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe'
+			Assert-Condition (-not ($entryNames -contains 'agents/checklist-reviewer.md')) 'packaged zip must not include retired agents/checklist-reviewer.md'
+			Assert-Condition (-not ($entryNames -contains 'agents/cpp-reviewer.md')) 'packaged zip must not include retired agents/cpp-reviewer.md'
+			Assert-Condition (-not ($entryNames -contains 'agents/gameplay-reviewer.md')) 'packaged zip must not include retired agents/gameplay-reviewer.md'
+			Assert-Condition (-not ($entryNames -contains 'skills/gp-review-checklist/SKILL.md')) 'packaged zip must not include retired skills/gp-review-checklist/SKILL.md'
+			Assert-Condition (-not ($entryNames -contains 'skills/gp-review-checklist/references/code-review-checklist.md')) 'packaged zip must not include retired skills/gp-review-checklist/references/code-review-checklist.md'
 			Assert-Condition (-not ($entryNames -contains 'skills/gp-design-parser/build-pdf-tool.ps1')) 'packaged zip must not include skills/gp-design-parser/build-pdf-tool.ps1'
 			Assert-Condition (-not ($entryNames -contains 'skills/gp-design-parser/pdf_to_annotated_markdown.py')) 'packaged zip must not include skills/gp-design-parser/pdf_to_annotated_markdown.py'
 			Assert-Condition (-not ($entryNames -contains 'commands/intake.md')) 'packaged zip must not include stale commands/intake.md'
 			Assert-Condition (-not ($entryNames -contains 'commands/scratch-not-for-release.md')) 'packaged zip must not include commands/scratch-not-for-release.md'
 			Assert-Condition (-not ($entryNames -contains 'commands/svn-handoff.md')) 'packaged zip must not include stale commands/svn-handoff.md'
+			Assert-Condition (-not ($entryNames -contains 'README.md')) 'packaged zip must not include README.md'
 		} finally {
 			$zip.Dispose()
 		}
@@ -879,6 +879,7 @@ Invoke-ToolkitCheck 'offline package fails when a tracked runtime source is miss
 			'skills',
 			'docs',
 			'scripts',
+			'QuickStart.md',
 			'README.md',
 			'settings.json'
 		)
@@ -913,7 +914,7 @@ Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 		},
 		@{
 			Path = 'commands/gp-review.md'
-			Needles = @('gp-task-stage-discipline', 'cpp-reviewer', 'gameplay-reviewer', 'checklist-reviewer', 'gp-review-checklist', 'gp-experience-researcher', 'Relevant prior learnings', 'Checklist coverage', '05-review.md')
+			Needles = @('gp-task-stage-discipline', 'code-reviewer', 'gp-experience-researcher', 'Relevant prior learnings', 'Review scope coverage', '05-review.md', 'Independent Review', 'review-only directory', 'review.md', 'Do not mechanically require', 'Independent review may report findings without fresh compile or validation evidence', 'Validation gaps')
 		},
 		@{
 			Path = 'commands/gp-svn-handoff.md'
@@ -946,43 +947,22 @@ Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
 }
 
-Invoke-ToolkitCheck 'gp-review does not call reviewer agents as skills' {
+Invoke-ToolkitCheck 'gp-review uses remaining review support only' {
 	$reviewCommandPath = Join-Path $repoRoot 'commands/gp-review.md'
 	$text = Get-FileText -Path $reviewCommandPath
 
-	Assert-Condition ($text -match [regex]::Escape('`cpp-reviewer` agent')) 'commands/gp-review.md must reference the cpp-reviewer agent by name'
-	Assert-Condition ($text -match [regex]::Escape('`gameplay-reviewer` agent')) 'commands/gp-review.md must reference the gameplay-reviewer agent by name'
-	Assert-Condition ($text -match [regex]::Escape('`checklist-reviewer` agent')) 'commands/gp-review.md must reference the checklist-reviewer agent by name'
-	Assert-Condition ($text -notmatch [regex]::Escape('agents/cpp-reviewer.md')) 'commands/gp-review.md must not use agents/cpp-reviewer.md runtime path'
-	Assert-Condition ($text -notmatch [regex]::Escape('agents/gameplay-reviewer.md')) 'commands/gp-review.md must not use agents/gameplay-reviewer.md runtime path'
-	Assert-Condition ($text -notmatch [regex]::Escape('agents/checklist-reviewer.md')) 'commands/gp-review.md must not use agents/checklist-reviewer.md runtime path'
-}
-
-Invoke-ToolkitCheck 'gp-review specialist agents stay bounded' {
-	$reviewCommandText = Get-FileText -Path (Join-Path $repoRoot 'commands/gp-review.md')
-	$gameplayText = Get-FileText -Path (Join-Path $repoRoot 'agents/gameplay-reviewer.md')
-	$checklistText = Get-FileText -Path (Join-Path $repoRoot 'agents/checklist-reviewer.md')
-
-	Assert-Condition ($reviewCommandText -match [regex]::Escape('bounded review packet')) 'commands/gp-review.md must require a bounded review packet before specialist review agents'
-	Assert-Condition ($reviewCommandText -match [regex]::Escape('Needs main-agent input')) 'commands/gp-review.md must tell bounded review agents to report missing evidence instead of broad scans'
-	Assert-Condition ($gameplayText -match [regex]::Escape('Bounded Review Contract')) 'agents/gameplay-reviewer.md must define a bounded review contract'
-	Assert-Condition ($gameplayText -match [regex]::Escape('disallowedTools: ["Write", "Edit", "Bash"]')) 'agents/gameplay-reviewer.md must deny write and Bash tools while inheriting MCP tools'
-	Assert-Condition ($gameplayText -notmatch '(?m)^tools:') 'agents/gameplay-reviewer.md must not use a tools allowlist that hides MCP tools'
-	Assert-Condition ($gameplayText -match [regex]::Escape('Do not run build commands, tests, repository-wide scans, or open-ended searches.')) 'agents/gameplay-reviewer.md must forbid open-ended searches'
-	Assert-Condition ($gameplayText -match [regex]::Escape('Needs main-agent input')) 'agents/gameplay-reviewer.md must return missing-evidence requests instead of searching indefinitely'
-	Assert-Condition ($gameplayText -match [regex]::Escape('Prefer MCP tools supplied by the active Claude Code session')) 'agents/gameplay-reviewer.md must prefer inherited MCP tools when file tools are blocked'
-	Assert-Condition ($checklistText -match [regex]::Escape('Bounded Review Contract')) 'agents/checklist-reviewer.md must define a bounded review contract'
-	Assert-Condition ($checklistText -match [regex]::Escape('disallowedTools: ["Write", "Edit", "Bash"]')) 'agents/checklist-reviewer.md must deny write and Bash tools while inheriting MCP tools'
-	Assert-Condition ($checklistText -notmatch '(?m)^tools:') 'agents/checklist-reviewer.md must not use a tools allowlist that hides MCP tools'
-	Assert-Condition ($checklistText -match [regex]::Escape('do not emit a 37-item table')) 'agents/checklist-reviewer.md must forbid full checklist dumps'
-	Assert-Condition ($checklistText -match [regex]::Escape('Needs main-agent input')) 'agents/checklist-reviewer.md must return missing-evidence requests instead of searching indefinitely'
-	Assert-Condition ($checklistText -match [regex]::Escape('Prefer MCP tools supplied by the active Claude Code session')) 'agents/checklist-reviewer.md must prefer inherited MCP tools when file tools are blocked'
+	Assert-Condition ($text -match [regex]::Escape('`code-reviewer` agent')) 'commands/gp-review.md must reference the code-reviewer agent by name'
+	Assert-Condition ($text -match [regex]::Escape('Review scope coverage')) 'commands/gp-review.md must record review scope coverage'
+	Assert-Condition ($text -match [regex]::Escape('main agent decide which findings are accepted and severity-ranked')) 'commands/gp-review.md must keep final review judgment with the main agent'
+	Assert-Condition ($text -match [regex]::Escape('Write the accepted independent review result to `<task-dir>/review.md`')) 'commands/gp-review.md must write independent reviews to review.md'
+	Assert-Condition ($text -match [regex]::Escape('Independent review may report findings without fresh compile or validation evidence')) 'commands/gp-review.md must allow independent review findings without validation evidence'
+	Assert-Condition ($text -match [regex]::Escape('must be recorded in `Validation gaps`')) 'commands/gp-review.md must record missing validation evidence in Validation gaps'
+	Assert-Condition ($text -match [regex]::Escape('Do not present an independent review as handoff-ready, delivery-ready, or commit-ready.')) 'commands/gp-review.md must keep independent review separate from delivery readiness'
 }
 
 Invoke-ToolkitCheck 'read-only specialist agents inherit MCP tools' {
 	$agentPaths = @(
 		'agents/code-reviewer.md',
-		'agents/cpp-reviewer.md',
 		'agents/gp-experience-researcher.md',
 		'agents/log-investigator.md'
 	)
@@ -1032,12 +1012,6 @@ Invoke-ToolkitCheck 'runtime prompts avoid plugin-relative lookup paths' {
 			)
 		},
 		@{
-			Path = 'agents/checklist-reviewer.md'
-			Forbidden = @(
-				'skills/gp-review-checklist/references/code-review-checklist.md'
-			)
-		},
-		@{
 			Path = 'agents/gp-experience-researcher.md'
 			Forbidden = @(
 				'skills/gp-experience-researcher/SKILL.md'
@@ -1067,20 +1041,12 @@ Invoke-ToolkitCheck 'runtime prompts avoid plugin-relative lookup paths' {
 Invoke-ToolkitCheck 'specialist agents stay advisory under main-agent orchestration' {
 	$checks = @(
 		@{
+			Path = 'agents/code-reviewer.md'
+			Needles = @('candidate', 'draft summary for the main agent', 'Do not issue the final workflow ruling.')
+		},
+		@{
 			Path = 'agents/gp-experience-researcher.md'
 			Needles = @('candidate connections', 'draft summary for the main agent', 'Do not make a final ruling.')
-		},
-		@{
-			Path = 'agents/cpp-reviewer.md'
-			Needles = @('candidate findings', 'draft summary for the main agent', 'Do not issue the final ruling.')
-		},
-		@{
-			Path = 'agents/gameplay-reviewer.md'
-			Needles = @('candidate findings', 'draft summary for the main agent', 'Do not make the final gameplay ruling.')
-		},
-		@{
-			Path = 'agents/checklist-reviewer.md'
-			Needles = @('candidate findings', 'draft summary', 'Do not issue the final review ruling.')
 		},
 		@{
 			Path = 'agents/log-investigator.md'
@@ -1119,116 +1085,6 @@ Invoke-ToolkitCheck 'experience fixtures stay in host-project-shaped test paths 
 		$text = Get-FileText -Path (Join-Path $repoRoot $relativePath)
 		if ($text -notmatch '(?m)^---\s*$') {
 			$missing += "$relativePath missing frontmatter"
-		}
-	}
-
-	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
-}
-
-Invoke-ToolkitCheck 'cpp reviewer preserves approved project norms' {
-	$reviewerPath = Join-Path $repoRoot 'agents/cpp-reviewer.md'
-	$text = Get-FileText -Path $reviewerPath
-	$forbidden = @(
-		'Hungarian notation is a problem',
-		'clang-format required',
-		'do not use Hungarian notation',
-		'Hungarian notation should be removed',
-		'ban Hungarian notation'
-	)
-
-	$hits = @()
-	foreach ($pattern in $forbidden) {
-		if ($text -match [regex]::Escape($pattern)) {
-			$hits += $pattern
-		}
-	}
-
-	Assert-Condition ($hits.Count -eq 0) ($hits -join '; ')
-}
-
-Invoke-ToolkitCheck 'checklist review runtime stays explicit in runtime files' {
-	$checks = @(
-		@{
-			Path = 'agents/gameplay-main.md'
-			Needles = @('checklist-reviewer', 'gp-review-checklist', 'Checklist coverage')
-		},
-		@{
-			Path = 'commands/gp-review.md'
-			Needles = @('checklist-reviewer', 'gp-review-checklist', 'Checklist coverage')
-		},
-		@{
-			Path = 'skills/gp-review-checklist/SKILL.md'
-			Needles = @('This skill is mandatory support work inside `gp-review`.', 'Checklist coverage', '`2.1`', '`8.3`')
-		},
-		@{
-			Path = 'agents/checklist-reviewer.md'
-			Needles = @('Checklist Coverage', 'Do not issue the final review ruling.', 'gp-review-checklist')
-		},
-		@{
-			Path = 'docs/operator/quickstart.md'
-			Needles = @('checklist review', 'Checklist coverage')
-		},
-		@{
-			Path = 'docs/workflow/request-lifecycle.md'
-			Needles = @('checklist review', 'checklist coverage')
-		}
-	)
-
-	$missing = @()
-	foreach ($check in $checks) {
-		$text = Get-FileText -Path (Join-Path $repoRoot $check.Path)
-		foreach ($needle in $check.Needles) {
-			if ($text -notmatch [regex]::Escape($needle)) {
-				$missing += "$($check.Path) missing $needle"
-			}
-		}
-	}
-
-	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
-}
-
-Invoke-ToolkitCheck 'review checklist reference keeps only 37 review items' {
-	$checklistPath = Join-Path $repoRoot 'skills/gp-review-checklist/references/code-review-checklist.md'
-	$text = Get-FileText -Path $checklistPath
-
-	Assert-Condition ((@(Get-Content -LiteralPath $checklistPath -TotalCount 1))[0] -ne '---') 'skills/gp-review-checklist/references/code-review-checklist.md must not keep source frontmatter'
-
-	$itemMatches = [regex]::Matches($text, '(?m)^\| \d+\.\d+ \|')
-	Assert-Condition ($itemMatches.Count -eq 37) "skills/gp-review-checklist/references/code-review-checklist.md must contain 37 checklist item rows, found $($itemMatches.Count)"
-
-	$sectionMatches = [regex]::Matches($text, '(?m)^## ')
-	Assert-Condition ($sectionMatches.Count -eq 8) "skills/gp-review-checklist/references/code-review-checklist.md must contain 8 checklist sections, found $($sectionMatches.Count)"
-
-	$requiredNeedles = @(
-		'| 1.1 | Code duplication issues |',
-		'| 2.1 | Allocation and release pairing |',
-		'| 4.1 | Hot-path interface performance |',
-		'| 6.4 | `KeepEffect` usage |',
-		'| 8.4 | `RoleManager` lookup |'
-	)
-
-	$missing = @()
-	foreach ($needle in $requiredNeedles) {
-		if ($text -notmatch [regex]::Escape($needle)) {
-			$missing += "skills/gp-review-checklist/references/code-review-checklist.md missing $needle"
-		}
-	}
-
-	$forbiddenPatterns = @(
-		'(?m)^page_type:',
-		'(?m)^title:',
-		'(?m)^source_refs:',
-		'(?m)^created_at:',
-		'(?m)^updated_at:',
-		'(?m)^## Priority',
-		'(?m)^## Usage',
-		'(?m)^## Source',
-		'(?m)^## Sources'
-	)
-
-	foreach ($pattern in $forbiddenPatterns) {
-		if ($text -match $pattern) {
-			$missing += "skills/gp-review-checklist/references/code-review-checklist.md must not match $pattern"
 		}
 	}
 
@@ -1303,7 +1159,7 @@ Invoke-ToolkitCheck 'router fixtures stay in context-card structure' {
 	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
 }
 
-Invoke-ToolkitCheck 'cpp review fixtures cover approved and rejected markers' {
+Invoke-ToolkitCheck 'cpp coding fixtures cover approved and rejected markers' {
 	$approvedPath = Join-Path $repoRoot 'tests/fixtures/cpp-review/approved-sample.cpp'
 	$rejectedPath = Join-Path $repoRoot 'tests/fixtures/cpp-review/reject-sample.cpp'
 
@@ -1343,10 +1199,10 @@ Invoke-ToolkitCheck 'cpp review fixtures cover approved and rejected markers' {
 }
 
 Invoke-ToolkitCheck 'claude CLI smoke precheck is documented or manually pending' {
-	$readmeText = Get-FileText -Path (Join-Path $repoRoot 'README.md')
-	Assert-Condition ($readmeText -match [regex]::Escape('claude --plugin-dir I:\CppGameDev')) 'README.md missing plugin smoke-test command'
-Assert-Condition ($readmeText -match [regex]::Escape('/plugin marketplace add foryoung365/CppGameDev-skill')) 'README.md missing marketplace add command'
-	Assert-Condition ($readmeText -match [regex]::Escape('/plugin install cmg@foryoung365-plugins')) 'README.md missing marketplace install command'
+	$quickstartText = Get-FileText -Path (Join-Path $repoRoot 'docs/operator/quickstart.md')
+	Assert-Condition ($quickstartText -match [regex]::Escape('claude --plugin-dir I:\CppGameDev')) 'docs/operator/quickstart.md missing plugin smoke-test command'
+	Assert-Condition ($quickstartText -match [regex]::Escape('/plugin marketplace add foryoung365/CppGameDev-skill')) 'docs/operator/quickstart.md missing marketplace add command'
+	Assert-Condition ($quickstartText -match [regex]::Escape('/plugin install cmg@foryoung365-plugins')) 'docs/operator/quickstart.md missing marketplace install command'
 
 	$claude = Get-Command claude -ErrorAction SilentlyContinue
 	if ($null -ne $claude) {

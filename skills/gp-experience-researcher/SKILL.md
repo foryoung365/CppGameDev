@@ -21,14 +21,16 @@ The skill may inform the main agent, but it never makes the stage decision, neve
 
 ## Library Resolution
 
-Search the host project's experience library, not the plugin repository.
+Search only the active host project's fixed experience library subtree:
 
-Resolve the library root in this order:
+- `docs/cmg/solutions/**`
 
-1. explicit root from the active host project's `claude.md`
-2. default namespaced root:
-   - `docs/cmg/solutions/bugs/`
-   - `docs/cmg/solutions/patterns/`
+Do not expand the search to task docs, source files, logs, build output, the plugin repository, or any other directory. Do not use `claude.md` or local configuration to widen the search root for this researcher.
+
+Within that fixed subtree, the supported tracks are:
+
+- `docs/cmg/solutions/bugs/`
+- `docs/cmg/solutions/patterns/`
 
 If neither path exists, return `No relevant learnings found` and note that the host project has no experience library yet.
 
@@ -55,9 +57,10 @@ Extract stable search terms from:
 
 ## Search Rules
 
-1. Search bug and pattern tracks in parallel.
-2. Narrow by `subdomain` first when available.
-3. Prefer frontmatter matches on:
+1. Search only under `docs/cmg/solutions/**`.
+2. Search bug and pattern tracks in parallel.
+3. Narrow by `subdomain` first when available.
+4. Prefer frontmatter matches on:
    - `subdomain`
    - `component`
    - `problem_type`
@@ -65,10 +68,10 @@ Extract stable search terms from:
    - `keywords`
    - `related_modules`
    - `related_configs`
-4. Use body-content search only as a fallback.
-5. Return only strong matches and the smallest useful set of medium matches.
-6. Skip weak matches.
-7. If a subagent is used to search or summarize, it may only gather candidate learnings, matched files, and short takeaways; the main agent must decide what is relevant and whether it should be carried forward.
+5. Use body-content search only as a fallback, still only inside `docs/cmg/solutions/**`.
+6. Return only strong matches and the smallest useful set of medium matches.
+7. Skip weak matches.
+8. If a subagent is used to search or summarize, it may only gather candidate learnings, matched files, and short takeaways from `docs/cmg/solutions/**`; the main agent must decide what is relevant and whether it should be carried forward.
 
 ## Output Format
 
