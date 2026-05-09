@@ -1,7 +1,7 @@
 {
     "name":  "cmg",
     "description":  "Claude Code workflow toolkit for C++ MMORPG gameplay server development with SVN-first delivery.",
-    "version":  "1.0.31",
+    "version":  "1.0.32",
     "author":  {
                    "name":  "foryoung365",
                    "url":  "https://github.com/foryoung365"

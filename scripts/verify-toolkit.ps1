@@ -952,7 +952,7 @@ Invoke-ToolkitCheck 'gp-design-parser annotated output and deletion-line contrac
 	$templateText = Get-FileText -Path (Join-Path $repoRoot 'skills/gp-design-parser/implementation-doc-template.md')
 
 	$requiredSkillNeedles = @(
-		'<原文件名>-anotated.md',
+		'<原文件名>-annotated.md',
 		'<del>...</del>',
 		'需移除该功能 / 废止该旧规则',
 		'未制作',

@@ -24,7 +24,7 @@ argument-hint: [策划案路径、文件名或任务说明]
 
 若输入是 PDF，必须在插件安装目录下寻找已捆绑的可执行工具：`skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe`。实际执行时，以当前 `gp-design-parser` 技能所在目录为基准，使用其下 `bin/pdf-to-annotated-markdown.exe` 将 PDF 转为带颜色标注的 Markdown，再基于该 Markdown 识别版本色标与变更内容；不要直接把 PDF 纯文本抽取结果当作颜色判断依据。
 
-- 标注稿默认输出到 `docs/design/<原文件名>-anotated.md`。
+- 标注稿默认输出到 `docs/design/<原文件名>-annotated.md`。
 - 不要自行构建、重新打包或寻找构建脚本；插件包已经捆绑 exe。
 - 若插件安装目录下的 `.exe` 不可用，停止 PDF 预处理并向用户报告缺失或不可执行的工具路径，不要改用自建工具。
 
@@ -33,7 +33,7 @@ argument-hint: [策划案路径、文件名或任务说明]
 ### 0. 预处理 PDF 色彩信息
 
 - 当输入是 PDF 时，先执行：
-  - `<插件安装目录>/skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe --input "<pdf路径>" --output "docs/design/<原文件名>-anotated.md"`
+  - `<插件安装目录>/skills/gp-design-parser/bin/pdf-to-annotated-markdown.exe --input "<pdf路径>" --output "docs/design/<原文件名>-annotated.md"`
 - 将生成的颜色标注 Markdown 作为颜色识别的一等输入。
 - 若标注稿中存在 `[color bg="..."]`、`[color fg="..."]` 或两者叠加标签，优先据此判断本次版本记录与正文的颜色对应关系。
 - 若标注稿中存在 `<del>...</del>`，将标签内文本视为删除线内容；删除线只表示该旧内容被划除，不表示应继续实现该旧规则。
