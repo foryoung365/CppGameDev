@@ -954,16 +954,13 @@ Invoke-ToolkitCheck 'gp-design-parser annotated output and deletion-line contrac
 	$requiredSkillNeedles = @(
 		'<原文件名>-annotated.md',
 		'<del>...</del>',
-		'需移除该功能 / 废止该旧规则',
-		'未制作',
-		'可以忽略',
-		'不要把它写成新增开发任务'
+		'标签内文字表示原文删除线，即被划除的旧内容',
+		'不要仅因存在 `<del>` 就绕过版本色标和版本记录判断',
+		'删除线旧内容若对应既有实现',
+		'未制作草案则可以忽略'
 	)
 	$requiredTemplateNeedles = @(
-		'<del>...</del>',
-		'已制作，需移除',
-		'未制作，可忽略',
-		'已制作的删除线内容应标注为需移除'
+		'删除线索'
 	)
 
 	$missing = @()
