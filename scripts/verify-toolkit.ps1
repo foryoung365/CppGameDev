@@ -947,6 +947,43 @@ Invoke-ToolkitCheck 'command docs align with plugin runtime authorities' {
 	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
 }
 
+Invoke-ToolkitCheck 'gp-design-parser annotated output and deletion-line contract stay explicit' {
+	$skillText = Get-FileText -Path (Join-Path $repoRoot 'skills/gp-design-parser/SKILL.md')
+	$templateText = Get-FileText -Path (Join-Path $repoRoot 'skills/gp-design-parser/implementation-doc-template.md')
+
+	$requiredSkillNeedles = @(
+		'<原文件名>-anotated.md',
+		'<del>...</del>',
+		'需移除该功能 / 废止该旧规则',
+		'未制作',
+		'可以忽略',
+		'不要把它写成新增开发任务'
+	)
+	$requiredTemplateNeedles = @(
+		'<del>...</del>',
+		'已制作，需移除',
+		'未制作，可忽略',
+		'已制作的删除线内容应标注为需移除'
+	)
+
+	$missing = @()
+	foreach ($needle in $requiredSkillNeedles) {
+		if ($skillText -notmatch [regex]::Escape($needle)) {
+			$missing += "skills/gp-design-parser/SKILL.md missing $needle"
+		}
+	}
+	foreach ($needle in $requiredTemplateNeedles) {
+		if ($templateText -notmatch [regex]::Escape($needle)) {
+			$missing += "skills/gp-design-parser/implementation-doc-template.md missing $needle"
+		}
+	}
+	if ($skillText -match [regex]::Escape('<原文件名>-颜色标注.md')) {
+		$missing += 'skills/gp-design-parser/SKILL.md must not use the retired <原文件名>-颜色标注.md output name'
+	}
+
+	Assert-Condition ($missing.Count -eq 0) ($missing -join '; ')
+}
+
 Invoke-ToolkitCheck 'gp-review uses remaining review support only' {
 	$reviewCommandPath = Join-Path $repoRoot 'commands/gp-review.md'
 	$text = Get-FileText -Path $reviewCommandPath
